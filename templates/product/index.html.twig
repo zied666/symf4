@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+{% block title %}Products List{% endblock %}
+{% block breadcrumb %}
+    <li><a href="{{ path('products_list') }}">Products list</a></li>
+{% endblock %}
+ {% block body %}
+<div class="content">  <div class="panel panel-flat">
+         <div class="panel-heading-custom">
+             {{ buttons.addItem("New Product",path("products_form")) }}
+         </div>
+         <table class="table" id="myTable">
+             <thead>
+             <tr>
+                 <th>Code</th>
+                 <th>Name</th>
+                 <th>Specific Gravity (S.G)</th>
+                 <th>Temp</th>
+                 <th>Unit</th>
+                 <th>Category</th>
+                 <th>Actions</th>
+             </tr>
+             </thead>
+         </table>
+     </div></div>
+ {% endblock %}
+{% block javascripts %}
+    {{ scripts.dataTable("products_list",'{data: "code"},{data: "name"},{data: "specificGravity"},{data: "temp"},{data: "designation"},{data: "category"},{data: "actions", orderable: false,width:"10%"}') }}
+{% endblock %}

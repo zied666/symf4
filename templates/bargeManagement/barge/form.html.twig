@@ -1,0 +1,106 @@
+{% extends ":bargeManagement/barge:index.html.twig" %}
+{% block title %}Barge{% endblock %}
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="#">Form</a></li>
+{% endblock %}
+ {% block body %}
+     <div class="row contains">
+         <div class="col-md-12">
+             {{ form_start(form) }}
+             <div class="panel panel-flat">
+                 <div class="panel-body">
+                     <legend class="text-bold">Barge Information</legend>
+                     <div class="row ">
+                         {{ forms.input("col-md-4","Ref",form.ref) }}
+                         {{ forms.input("col-md-4","Name",form.name) }}
+                         {{ forms.input("col-md-4","City",form.city) }}
+                     </div>
+                     <div class="row">
+                         {{ forms.input("col-md-4","Barge Owner",form.bargeCompany) }}
+                         {{ forms.input("col-md-4","Barge Type",form.bargeType) }}
+                         {{ forms.input("col-md-4","Volume",form.volume) }}
+                     </div>
+                     <div class="row">
+                         {{ forms.input("col-md-4","Tonnage",form.tonnage) }}
+                         {{ forms.input("col-md-4","Dimensions",form.dimensions) }}
+                         {{ forms.input("col-md-4","Api ID",form.apiId) }}
+                     </div>
+                     <div class="row">
+                         {{ forms.image("col-md-4","Image",form.image,barge.image) }}
+                         {{ forms.file("col-md-4","Pdf",form.pdf,barge.pdf,"pdf") }}
+                         {{ forms.file("col-md-4","Linearity Values",form.excel,barge.excel,"excel") }}
+                     </div>
+                     <div class="row">
+                         <div class="col-md-12">
+                             <legend class="text-bold">Tanks</legend>
+                         </div>
+                         <div class="col-md-9">
+                             <div class="content-group ">
+                                 <div class="tanks"
+                                      data-prototype="{{ forms.input("col-md-2","Name",form.tanks.vars.prototype.name)|e('html_attr') }} {{ forms.input("col-md-2","Volume (m3)",form.tanks.vars.prototype.volume)|e('html_attr') }} {{ forms.input("col-md-1","Comp.",form.tanks.vars.prototype.compartiment)|e('html_attr') }} {{ forms.input("col-md-1","Position",form.tanks.vars.prototype.position)|e('html_attr') }} {{ forms.input("col-md-1","Index L",form.tanks.vars.prototype.indexLevel)|e('html_attr') }}{{ forms.input("col-md-1","Index tmp",form.tanks.vars.prototype.indexTemperature)|e('html_attr') }} {{ forms.checkbox("col-md-2","Is slop tank",form.tanks.vars.prototype.isSlopTank)|e('html_attr') }}">
+                                     {% for formTank in form.tanks %}
+                                         <div class="row tank">
+                                             <div class="panel-heading">
+                                                 <div class="heading-elements">
+                                                     <ul class="icons-list">
+                                                         <li><a data-action="close"></a></li>
+                                                     </ul>
+                                                 </div>
+                                             </div>
+                                             {{ forms.input("col-md-2","Name",formTank.name) }}
+                                             {{ forms.input("col-md-2","Volume (m3)",formTank.volume) }}
+                                             {{ forms.input("col-md-1","Comp.",formTank.compartiment) }}
+                                             {{ forms.input("col-md-1","Position",formTank.position) }}
+                                             {{ forms.input("col-md-1","Index L",formTank.indexLevel) }}
+                                             {{ forms.input("col-md-1","Index T",formTank.indexTemperature) }}
+                                             {{ forms.checkbox("col-md-2","is Slop Tank",formTank.isSlopTank) }}
+                                             {% if not barge.isExistTank(formTank.vars.value.name)  %}
+                                                 <div class="col-md-12">
+                                                     <code>This Tank doesn't exist in tables liquid height</code>
+                                                 </div>
+                                             {% endif %}
+                                             <div class="col-md-12"><hr></div>
+                                         </div>
+                                     {% endfor %}
+                                 </div>
+                             </div>
+                         </div>
+                         <div class="col-md-3">
+                             {% if barge.tanks|length>0 %}
+                                 <div class="row">
+                                     <div id="triangle-up"></div>
+                                 </div>
+                                 {% for compartiment in 0..10 %}
+                                     {% if barge.getCountTanksByCompartiment(compartiment)>0 %}
+                                         <div class="row">
+                                             {% for tank in barge.getTanksByCompartiment(compartiment) %}
+                                                 <div class="{{ barge.getClassByCompartiment(compartiment) }} {% if tank.isSlopTank %}slopTank{% endif %}">{{ tank }}</div>
+                                             {% endfor %}
+                                         </div>
+                                     {% endif %}
+                                 {% endfor %}
+                                 <div class="row">
+                                     <div id="triangle-down"></div>
+                                 </div>
+                             {% endif %}
+                         </div>
+                     </div>
+                     {{ buttons.submitForm() }}
+                 </div>
+             </div>
+             <div class="hidden">{{ form_rest(form) }}</div>
+             {{ form_end(form) }}
+         </div>
+     </div>
+     {% if  barge.matrice %}
+         {{ render(controller('AppBundle:Barge:renderBargeToMatrice',{ 'id': barge.id })) }}
+     {% endif %}
+ {% endblock %}
+{% block javascripts %}
+    {% include ':bargeManagement/barge:form_javascript.html.twig' %}
+{% endblock %}
+{% block stylesheets %}
+    {% include ':bargeManagement/barge:form.stylesheets.html.twig' %}
+{% endblock %}
+

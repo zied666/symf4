@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+{% block title %}Countries List{% endblock %}
+{% block breadcrumb %}
+    <li><a href="{{ path('countries_list') }}">Countries list</a></li>
+{% endblock %}
+ {% block body %}
+<div class="content">
+    <div class="panel panel-flat">
+        <div class="panel-heading-custom">
+            {{ buttons.addItem("New Country",path("countries_form")) }}
+        </div>
+        <table class="table" id="myTable">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+ {% endblock %}
+{% block javascripts %}
+    {{ scripts.dataTable("countries_list",'{data: "name"},{data: "actions", orderable: false,width:"10%"}') }}
+{% endblock %}

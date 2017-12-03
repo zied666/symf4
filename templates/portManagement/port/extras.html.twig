@@ -1,0 +1,13 @@
+{% import ":layout/macros:buttons.html.twig" as buttons %}
+{% if viewType == "actions" %}
+    <ul class="icons-list">
+        <li>{{ buttons.deleteAction(path("port_delete",{id:item.id})) }}</li>
+        <li>{{ buttons.updateAction(path("port_form",{id:item.id})) }}</li>
+    </ul>
+    <script>$('[data-popup="tooltip"]').tooltip();</script>
+{% endif %}
+{% if viewType == "terminals" %}
+    {% for terminal in item.terminals %}
+        <p> - {{ terminal.name }}</p>
+    {% endfor %}
+{% endif %}

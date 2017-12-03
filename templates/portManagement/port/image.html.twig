@@ -1,0 +1,9 @@
+{% import ":layout/macros:buttons.html.twig" as buttons %}
+{% if viewType=="image" %}
+    <div>
+        {{ buttons.imageAction(item.image)}}
+    </div>
+{% endif %}
+
+<link href="{{ asset('back_template/light_box/light_box.css') }}" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="{{ asset('back_template/light_box/light_box.js') }}"></script>

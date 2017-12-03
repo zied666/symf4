@@ -1,0 +1,8 @@
+{% import ":layout/macros:buttons.html.twig" as buttons %}
+{% if viewType == "actions" %}
+    <ul class="icons-list">
+        <li>{{ buttons.deleteAction(path("barge_type_delete",{id:item.id})) }}</li>
+        <li>{{ buttons.updateAction(path("barge_type_form",{id:item.id})) }}</li>
+    </ul>
+    <script>$('[data-popup="tooltip"]').tooltip();</script>
+{% endif %}

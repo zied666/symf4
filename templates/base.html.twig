@@ -1,0 +1,80 @@
+{% import "layout/macros/buttons.html.twig" as buttons %}
+{% import "layout/macros/forms.html.twig" as forms %}
+{% import "layout/macros/scripts.html.twig" as scripts %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block meta %}{% endblock %}
+    <title>{% block title %}Administration{% endblock %}</title>
+
+    <!-- Global stylesheets -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,300,100,500,700,900" rel="stylesheet" type="text/css">
+    <link href="{{ asset('back_template/assets/css/icons/icomoon/styles.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('back_template/assets/css/bootstrap.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('back_template/assets/css/core.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('back_template/assets/css/components.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('back_template/assets/css/colors.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('custom_assets/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('custom_assets/css/font.css') }}" rel="stylesheet" type="text/css">
+    <link href="{{ asset('custom_assets/css/style.css') }}" rel="stylesheet" type="text/css">
+    <!-- /global stylesheets -->
+
+    {% block stylesheets %}{% endblock %}
+
+    <!-- Core JS files -->
+    <script type="text/javascript" src="{{ asset('back_template/assets/js/plugins/loaders/pace.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('back_template/assets/js/core/libraries/jquery.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('back_template/assets/js/core/libraries/bootstrap.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('back_template/assets/js/plugins/loaders/blockui.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('back_template/assets/js/core/app.js') }}"></script>
+    <!-- /core JS files -->
+
+    {% block javascripts %}{% endblock %}
+
+    {{ scripts.notification() }}
+
+    {% include "layout/alert.html.twig" %}
+
+</head>
+<body {% if app.request.session.get('menu_collapsed') %}class="sidebar-xs"{% endif %}>
+{% include 'layout/navbar.html.twig' %}
+<div class="page-container">
+    <div class="page-content">
+        {% include 'layout/sidebar.html.twig' %}
+        <div class="content-wrapper">
+            {% if app.request.get('_route')!= "dashboard" and app.request.get('_route')!= "dashboardBarge"%}
+                <div class="page-header">
+                    <div class="page-header-content">
+                        <div class="page-title">
+                            <h4 class="text-mauve-300"><span class="text-semibold">{{ block('title') }}</span></h4>
+                        </div>
+                    </div>
+                    <div class="breadcrumb-line">
+                        <ul class="breadcrumb">
+                            <li><a href="{{ path("dashboard") }}"><i class="icon-home2 position-left"></i> Dashboard</a></li>
+                            {% block breadcrumb %}{% endblock %}
+                        </ul>
+                    </div>
+                </div>
+            {% endif %}
+            {#<div class="content">#}
+                {% block body %}{% endblock %}
+                {% include "layout/footer.html.twig" %}
+            {#</div>#}
+        </div>
+    </div>
+</div>
+<script>
+    $(document).ready(function () {
+        $('.sidebar-control').click(function () {
+            $.ajax({
+                url: "{{ path('ajax_change_menu') }}"
+            })
+        })
+    })
+</script>
+</body>
+</html>

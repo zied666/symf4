@@ -1,0 +1,63 @@
+{% extends "base.html.twig" %}
+{% block title %}Notification{% endblock %}
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="#">Form</a></li>
+{% endblock %}
+ {% block body %}
+     <div class="row">
+         <div class="col-md-12">
+             {{ form_start(form) }}
+             <div class="panel panel-flat">
+                 <div class="panel-body">
+                     <div class="row ">
+                         <fieldset class="content-group">
+                             <legend class="text-bold">Confirmations</legend>
+                             <div class="row">
+                                 {{ forms.input("col-md-6","Preloading Confirmed",form.noticePreloadingConfirmed) }}
+                                 {{ forms.input("col-md-6","Loading Confirmed",form.noticeLoadingConfirmed) }}
+                                 {{ forms.input("col-md-6","Exit Confirmed",form.noticeExitConfirmed) }}
+                                 {{ forms.input("col-md-6","Arrival Confirmed",form.noticeArrivalConfirmed) }}
+                                 {{ forms.input("col-md-6","Unloading Confirmed",form.noticeUnloadingConfirmed) }}
+                             </div>
+                         </fieldset>
+                         <fieldset class="content-group">
+                             <legend class="text-bold">Alerts</legend>
+                             <div class="row">
+                                 {{ forms.input("col-md-6","Absence of data",form.exceptionAbsenceData) }}
+                                 {{ forms.input("col-md-3","Degree",form.exceptionAbsenceDataDegree) }}
+                                 {{ forms.input("col-md-3","Type",form.exceptionAbsenceDataType) }}
+                             </div>
+                             <div class="row">
+                                 {{ forms.input("col-md-6","Incorrect route",form.exceptionIncorrectRoute) }}
+                                 {{ forms.input("col-md-3","Degree",form.exceptionIncorrectRouteDegree) }}
+                                 {{ forms.input("col-md-3","Type",form.exceptionIncorrectRouteType) }}
+                             </div>
+                             <div class="row">
+                                 {{ forms.input("col-md-6","Incorrect planning date",form.exceptionIncorrectPlanningDate) }}
+                                 {{ forms.input("col-md-3","Degree",form.exceptionIncorrectPlanningDateDegree) }}
+                                 {{ forms.input("col-md-3","Type",form.exceptionIncorrectPlanningDateType) }}
+                             </div>
+                             <div class="row">
+                                 {{ forms.input("col-md-6","Tanks not empty",form.exceptionTankNotEmpty) }}
+                                 {{ forms.input("col-md-3","Degree",form.exceptionTankNotEmptyDegree) }}
+                                 {{ forms.input("col-md-3","Type",form.exceptionTankNotEmptyType) }}
+                             </div>
+                             <div class="row">
+                                 {{ forms.input("col-md-6","Product Level Changed",form.exceptionChangeOilLevel) }}
+                                 {{ forms.input("col-md-3","Degree",form.exceptionChangeOilLevelDegree) }}
+                                 {{ forms.input("col-md-3","Type",form.exceptionChangeOilLevelType) }}
+                             </div>
+                         </fieldset>
+                     </div>
+                     {{ buttons.submitForm() }}
+                 </div>
+             </div>
+             {{ form_end(form) }}
+         </div>
+     </div>
+ {% endblock %}
+
+{% block javascripts %}
+    {{ scripts.form() }}
+{% endblock %}

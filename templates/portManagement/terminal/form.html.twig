@@ -1,0 +1,25 @@
+{% extends ":portManagement/terminal:index.html.twig" %}
+{% block title %}{% endblock %}
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="#">Form</a></li>
+{% endblock %}
+ {% block body %}
+     <div class="row">
+         <div class="col-md-12">
+             {{ form_start(form) }}
+             <div class="panel panel-flat">
+                 <div class="panel-body">
+                     <div class="row ">
+                         {{ forms.input("col-md-4","Name",form.name) }}
+                         {{ forms.input("col-md-4","Longitude",form.longitude) }}
+                         {{ forms.input("col-md-4","Lattitude",form.latitude) }}
+                     </div>
+                     {{ buttons.submitForm() }}
+                 </div>
+             </div>
+             {{ form_end(form) }}
+         </div>
+     </div>
+ {% endblock %}
+

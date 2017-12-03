@@ -1,0 +1,195 @@
+{% extends "base.html.twig" %}
+{% block title %}Voyage{% endblock %}
+{% block breadcrumb %}
+    {{ parent() }}
+    <li><a href="#">Voyage Form</a></li>
+{% endblock %}
+
+     {% block form_row -%}
+         <div class="col-md-4">
+             <div class="form-group">
+                 {{- form_label(form) -}}
+                 {{ form_widget(form,{attr:{class:"form-control"}}) | raw }}
+                 <span class="text-danger">{{ form_errors(form) | raw }}</span>
+             </div>
+         </div>
+     {%- endblock form_row %}
+ {% block body %}
+
+     {% form_theme form _self %}
+     <div class="row">
+         <div class="col-md-12">
+             {{ form_start(form) }}
+             <div class="panel panel-flat">
+                 <div class="panel-body">
+                     <fieldset class="content-group">
+                         <legend class="text-bold">Voyage</legend>
+                         <div class="row ">
+                             {{ forms.input("col-md-4","Ref",form.ref) }}
+                             {{ forms.input("col-md-4","Barge",form.barge) }}
+                         </div>
+                         <div class="row">
+                             {{ forms.input("col-md-12","Remarks",form.remark) }}
+                         </div>
+                         <div class="row ">
+                             {{ forms.input("col-md-4","Previous Cargo 1",form.previousCargo1) }}
+                             {{ forms.input("col-md-4","Previous Cargo 2",form.previousCargo2) }}
+                             {{ forms.input("col-md-4","Previous Cargo 3",form.previousCargo3) }}
+                         </div>
+                     </fieldset>
+                     <fieldset class="content-group">
+                         <legend class="text-bold">Loading</legend>
+                         <div class="row">
+                             {{ forms.datePicker("col-md-4","Date",form.loadingDate) }}
+                             {{ forms.input("col-md-4","Port",form.loadingPort) }}
+                             {{ forms.input("col-md-4 loadingBlock","Terminal",form.loadingTerminal) }}
+                         </div>
+                     </fieldset>
+                     <fieldset class="content-group">
+                         <legend class="text-bold">Voyage</legend>
+                         <div class="row">
+                             {{ forms.datePicker("col-md-4","Departure Date",form.voyageDate) }}
+                             {{ forms.datePicker("col-md-4","Arrival date",form.arriveDate) }}
+                         </div>
+                     </fieldset>
+                     <fieldset class="content-group">
+                         <legend class="text-bold">unloading</legend>
+                         <div class="row">
+                             {{ forms.datePicker("col-md-4","Date",form.unloadingDate) }}
+                             {{ forms.input("col-md-4","Port",form.unloadingPort) }}
+                             {{ forms.input("col-md-4 loadingBlock","Terminal",form.unloadingTerminal) }}
+                         </div>
+                     </fieldset>
+                     <div class="content-group ">
+                         <legend class="text-bold">Products</legend>
+                         <div class="products"
+                              data-prototype="{{ forms.input("col-md-4","Product",form.products.vars.prototype.product)|e('html_attr') }} {{ forms.input("col-md-4","Quantity (mTon)",form.products.vars.prototype.quantity)|e('html_attr') }}">
+                             {% for formProduct in form.products %}
+                                 <div class="row product">
+                                     <div class="panel-heading">
+                                         <div class="heading-elements">
+                                             <ul class="icons-list">
+                                                 <li><a data-action="close"></a></li>
+                                             </ul>
+                                         </div>
+                                     </div>
+                                     {{ forms.input("col-md-4","Product",formProduct.product) }}
+                                     {{ forms.input("col-md-4","Quantity (mTon)",formProduct.quantity) }}
+                                 </div>
+                             {% endfor %}
+                         </div>
+                     </div>
+                     {{ buttons.submitForm() }}
+                 </div>
+             </div>
+             <div class="hidden">{{ form_rest(form) }}</div>
+             {{ form_end(form) }}
+         </div>
+     </div>
+
+ {% endblock %}
+{% block javascripts %}
+    {{ scripts.form() }}
+    {{ scripts.datepicker() }}
+    {{ scripts.loading() }}
+    <script>
+        var $collectionHolder;
+        var $addTagLink = $('<a href="#" class="btn btn-success add_tag_link"><i class="icon-plus2"></i> Add a product</a>');
+        var $newLinkLi = $('<div></div>').append($addTagLink);
+        jQuery(document).ready(function () {
+            $collectionHolder = $('.products');
+            $collectionHolder.append($newLinkLi);
+            $collectionHolder.data('index', $collectionHolder.find(':input').length);
+            $addTagLink.on('click', function (e) {
+                e.preventDefault();
+                addTagForm($collectionHolder, $newLinkLi);
+            });
+            $(".removeProduct").on('click', function (e) {
+                e.preventDefault();
+                $tagFormLi.remove();
+            });
+
+            function addTagForm($collectionHolder, $newLinkLi) {
+                var prototype = $collectionHolder.data('prototype');
+                var index = $collectionHolder.data('index');
+                var newForm = prototype.replace(/__name__/g, index);
+                $collectionHolder.data('index', index + 1);
+                console.log($collectionHolder);
+                var $newFormLi = $('<div class="row product"><div class="panel-heading"><div class="heading-elements"><ul class="icons-list"><li><a data-action="close" class="removeProduct"></a></li></ul></div></div></div>').append($(newForm));
+                console.log($newFormLi);
+                $newLinkLi.before($newFormLi);
+                //console.log($newFormLi);
+            }
+
+            $(document).on('click', '.removeProduct', function () {
+                $(this).parent().parent().parent().parent().parent().remove()
+            })
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            function emptySelect(select) {
+                $("#appbundle_voyage_" + select).empty();
+                $("#appbundle_voyage_" + select).select2();
+                //$("." + select).hide();
+            }
+
+            function showSelect(select) {
+                $("#appbundle_voyage_" + select).select2();
+                $("." + select).show();
+            }
+            {% if voyage.id is null %}
+            emptySelect("loadingTerminal");
+            emptySelect("unloadingTerminal");
+            {% endif %}
+            $("#appbundle_voyage_loadingPort").on('change', function () {
+                emptySelect("loadingTerminal");
+                var id = $(this).val();
+                if (id != '') {
+                    loadingBlock();
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ path('ajax_port_to_terminal') }}",
+                        data: {id: id},
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            emptySelect("appbundle_voyage_loadingTerminal");
+                            $.each(data, function (index, value) {
+                                $('#appbundle_voyage_loadingTerminal').append('<option value="' + index + '"> ' + value + ' </option>');
+                            });
+                            showSelect("loadingTerminal");
+                            unloadingBlock();
+                        }
+                    });
+                }
+            });
+            $("#appbundle_voyage_unloadingPort").on('change', function () {
+                emptySelect("unloadingTerminal");
+                var id = $(this).val();
+                if (id != '') {
+                    loadingBlock();
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ path('ajax_port_to_terminal') }}",
+                        data: {id: id},
+                        dataType: "json",
+                        cache: false,
+                        success: function (data) {
+                            emptySelect("appbundle_voyage_unloadingTerminal");
+                            $.each(data, function (index, value) {
+                                $('#appbundle_voyage_unloadingTerminal').append('<option value="' + index + '"> ' + value + ' </option>');
+                            });
+                            showSelect("unloadingTerminal");
+                            unloadingBlock();
+                        }
+                    });
+                }
+            });
+        })
+    </script>
+{% endblock %}
+
+
+
+

@@ -1,0 +1,114 @@
+{% extends "base.html.twig" %}
+{% block title %}Voyage List{% endblock %}
+{% block breadcrumb %}
+    <li><a href="{{ path('voyage_list') }}">Topics list</a></li>
+{% endblock %}
+ {% block body %}
+     <div class="row">
+         <div class="col-md-12 loadingBlock">
+             {{ form_start(form) }}
+             <div class="panel panel-flat">
+                 <div class="panel-body">
+                     <div class="row">
+                         {{ forms.input("col-md-4","State",form.state) }}
+                         {{ forms.input("col-md-4","Product",form.product) }}
+                         {{ forms.input("col-md-4","Barge",form.barge) }}
+                         {{ forms.datePicker("col-md-2","Loading Date",form.loadingDate) }}
+                         {{ forms.datePicker("col-md-2","Departure Date",form.voyageDate) }}
+                         {{ forms.datePicker("col-md-2","Arrival Date",form.arrivalDate) }}
+                         {{ forms.datePicker("col-md-2","Unloading Date",form.unloadingDate) }}
+                         <div class="col-md-2 ">
+                             <div class="form-group">
+                                 <label>&nbsp;</label>
+                                 <a href="{{ path('voyage_list') }}" class="btn btn-block btn-danger">
+                                     Reset
+                                 </a>
+                             </div>
+                         </div>
+                         {{ buttons.filtreForm("col-md-2") }}
+                     </div>
+                 </div>
+             </div>
+             {{ form_end(form) }}
+         </div>
+     </div>
+     <div class="row">
+         <div class="col-md-12">
+             <div class="panel panel-body">
+                 <p class="text-muted text-size-small">About {{ voyages.getTotalItemCount }} results ({{ event.duration/1000 }}
+                     seconds)</p>
+
+                 <hr>
+                 <table class="table tasks-list table-lg">
+                     <thead>
+                     <tr>
+                         <th rowspan="2">Created</th>
+                         <th rowspan="2">Ref</th>
+                         <th colspan="2"> Loading</th>
+                         <th rowspan="2"> Departure Date</th>
+                         <th rowspan="2"> Arrival Date</th>
+                         <th colspan="2"> Unloading</th>
+                         <th rowspan="2">Vendor</th>
+                         <th rowspan="2">Quantity</th>
+                         <th rowspan="2">Status</th>
+                         <th rowspan="2">Actions</th>
+                     </tr>
+                     <tr>
+                         <th> Loading Date</th>
+                         <th> Loading Port</th>
+                         <th> Unloading Date</th>
+                         <th> Unloading Port</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     {% for voyage in voyages %}
+                         <tr>
+                             <td>{{ voyage.created|date('d/m/Y') }}</td>
+                             <td>{{ voyage.ref }}</td>
+                             <td>{{ voyage.loadingDate|date('d/m/Y') }}</td>
+                             <td>{{ voyage.loadingPort }}</td>
+                             <td>{{ voyage.voyageDate|date('d/m/Y') }}</td>
+                             <td>{{ voyage.arriveDate|date('d/m/Y') }}</td>
+                             <td>{{ voyage.unloadingDate|date('d/m/Y') }}</td>
+                             <td>{{ voyage.unloadingPort }}</td>
+                             <td>{{ voyage.vendor }}</td>
+                             <td>{{ voyage.quantity }} Mton</td>
+                             <td>
+                                 {% if voyage.state == 1 %} <span class="label bg-purple">Created</span> {% endif %}
+                                 {% if voyage.state == 99 %} <span class="label label-danger">Canceled</span> {% endif %}
+                                 {% if voyage.state == 2 %} <span class="label label-default">Pre-Loading</span> {% endif %}
+                                 {% if voyage.state == 3 %} <span class="label label-primary">Loading</span> {% endif %}
+                                 {% if voyage.state == 4 %} <span class="label label-info">Exit</span> {% endif %}
+                                 {% if voyage.state == 5 %} <span class="label label-warning">Arrival</span> {% endif %}
+                                 {% if voyage.state == 6 %} <span class="label label-success">Unloading</span> {% endif %}
+                             </td>
+                             <td class="text-center center">
+                                 <ul class="icons-list">
+                                         <li>{{ buttons.updateAction(path("voyage_form",{id:voyage.id})) }}</li>
+                                        {% if voyage.state == 1 %}
+                                            <li>{{ buttons.deleteRedirectAction(path("voyage_delete",{id:voyage.id}),'Are you sure you want to delete this voyage') }}</li>
+                                        {% endif %}
+                                 </ul>
+                             </td>
+                         </tr>
+                     {% endfor %}
+                     </tbody>
+                 </table>
+                 {{ knp_pagination_render(voyages) }}
+             </div>
+         </div>
+     </div>
+ {% endblock %}
+{% block javascripts %}
+    {{ scripts.form() }}
+    {{ scripts.datepicker() }}
+{% endblock %}
+{% block stylesheets %}
+    <style>
+        .table th{
+            vertical-align: middle !important;
+            text-align: center !important;
+        }
+    </style>
+{% endblock %}
+

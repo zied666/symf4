@@ -1,0 +1,1956 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div style="position: relative">
+        <div class="sample sample-2">
+            <div class="box small" dw-loading="sample-2"
+            dw-loading-options="{active: true, text: '', className: 'custom-loading', spinnerOptions: {lines: 12, length: 20, width: 6, radius: 15, color: '#00844e', direction: -1, speed: 3}}">
+            dw-loading-options="{active: true, text: 'Loading', className: 'custom-loading', spinnerOptions: {lines: 12, length: 20, width: 6, radius: 20, color: '#f0f', direction: -1, speed: 3}}">
+            </div>
+        </div>
+        <div class="content content-dash-details">
+
+            <div ui-view>
+            </div>
+
+            <div class="barge_list" style="height: 100%" ng-show="showDiv">
+                <div class="logos">
+                    <div class="logo">
+                        <a href="{{ path('dashboard') }}">
+                            <img src="{{ asset('custom_assets/images/logo/logo.png') }}" width="80" class="" alt="">
+                        </a>
+                        <p class="logo_text">POC Vegoil Tracking V.0</p>
+                    </div>
+                    <button class="btn settings" ng-click="hideConfig = !hideConfig; gotoDash()">
+                        <img src="{{ asset('custom_assets/images/icons/settings.png') }}"
+                             class=""
+                             alt="">
+                    </button>
+                </div>
+
+                <div class="list-barge-progress first-side" ng-hide="hideConfig">
+                    <div class="panel with-nav-tabs panel-default">
+                        <div class="panel-heading">
+                            <ul class="nav nav-tabs">
+                                <li ng-class="{'active': $storage.idType == 'progress'}">
+                                    <a href="#tab1default" data-toggle="tab">In progress</a>
+                                </li>
+                                <li ng-class="{'active': $storage.idType == 'planned'}">
+                                    <a class="second-tab" href="#tab2default" data-toggle="tab">Planned</a>
+                                </li>
+                                <li ng-class="{'active': $storage.idType == 'historic'}">
+
+                                    <a class="third-tab" href="#tab3default" data-toggle="tab">Historic</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="panel-body">
+                            <div class="tab-content">
+                                <div class="tab-pane fade in" ng-class="{'active': $storage.idType == 'progress'}"
+                                     id="tab1default">
+                                    <div class="panel-group" id="accordion1">
+                                        <button class="btn expandedBtn"
+                                                show-allprogress=""
+                                                ng-click="toggleExpandedprogress = !toggleExpandedprogress">
+                                            expanded All <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                        </button>
+                                        <div class="panel" ng-repeat="item in barges">
+                                            <div class="panel-heading  list-nessekade"
+                                                 ng-class="{ activeBg : item.active}">
+                                                <h6 class="panel-title">{[{item.ref}]}&nbsp;&nbsp;&nbsp;
+                                                    <span ng-switch="item.status">
+                                                        <span class="status status-created"
+                                                              ng-switch-when="1">CREATED</span>
+                                                        <span class="status status-preload" ng-switch-when="2">PRELOADING CONFIRMED</span>
+                                                        <span class="status status"
+                                                              ng-switch-when="3">LOADING CONFIMED</span>
+                                                        <span class="status status"
+                                                              ng-switch-when="4">EXIT CONFIRMED</span>
+                                                        <span class="status status"
+                                                              ng-switch-when="5">ARRIVAL CONFIRMED</span>
+                                                        <span class="status status-unload" ng-switch-when="6">UNLOADING CONFIRMED</span>
+                                                        <span class="status status" ng-switch-when="99">CANCELED</span>
+                                                        <span class="status status" ng-switch-default>No status</span>
+                                                    </span>
+                                                </h6>
+
+                                                <div class="">
+                                                    <ul class="icons-list">
+                                                        <li class="alert-collapse-tech" ng-if="$index==1">
+                                                            <img width="15"
+                                                                 src="{{ asset('custom_assets/images/icons/ic_technique.png') }}">
+                                                        </li>
+                                                        <li class="alert-collapse-fonc" ng-if="$index==0">
+                                                            <img width="15"
+                                                                 src="{{ asset('custom_assets/images/icons/ic_functional.png') }}">
+                                                        </li>
+                                                        <li>
+                                                            <a data-action="collapse"
+                                                               data-toggle="collapse"
+                                                               ng-click="showChilds($index)"
+                                                               data-parent="#accordion1"
+                                                               href="#collapse{[{ $index }]}"></a>
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+                                                <div class="table-barge row">
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="" width="19"
+                                                             src="{{ asset('custom_assets/images/icons/ic_loading2.png') }}">
+
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            {[{item.loadingPort.name}]}<br>
+                                                            {[{item.loadingDate | date:'dd/MM/yyyy HH:mm':'UTC' }]} UTC</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="" width="19"
+                                                             src="{{ asset('custom_assets/images/icons/ic_unloading2.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                           {[{item.unloadingPort.name}]}<br>
+                                                            {[{item.unloadingDate | date:'dd/MM/yyyy HH:mm':'UTC' }]} UTC</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="table-barge row">
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            current Quantity:<br>
+                                                           {[{ item.currentWeight }]} TM</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            contracted Quantity:<br>
+                                                                {#{[{ item.products | quantityByProduct: 'quantite' }]}#}
+                                                                {[{ item.barge.tanks| quantityByProduct: 'volume' }]} TM</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="table-barge row">
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            loaded Quantity:<br>
+                                                           {[{  item.loadedWeight}]} TM</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            unloaded Quantity:<br>
+                                                           ND</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="table-barge row">
+                                                    <div class="col-sm-12 col-xs-12">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/ic-product.png') }}">
+
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            products<br>
+                                                                <span ng-repeat="produit in item.products">
+                                                                    <span>{[{ $index+1 }]}-{[{produit.product.name}]}</span><br>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="collapse{[{ $index }]}"
+                                                 class="panel-collapse panel-progress collapse"
+                                                 ng-class="{ in : $storage.idDetails==item.id }">
+                                                <div class="panel-body">
+                                                    <div class="details-barge ">
+                                                        <div class="title row">
+                                                            <div class="title_left col-sm-6 col-xs-6">
+                                                                <img class="barge_blanc"
+                                                                     src="{{ asset('custom_assets/images/icons/barge_blanc.png') }}">
+                                                                {[{item.barge.name}]}
+                                                            </div>
+                                                            <div class="title_right col-sm-6 col-xs-6 text-right">
+                                                                {[{item.createdDate | date:'dd MMMM yyyy HH:mm':'UTC'
+                                                                }]} UTC
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-details table-borderless table-xs content-group-sm">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/ic-product.png') }}">
+                                                                    <span class="table-title"> Products:</span>
+                                                                </td>
+                                                                <td class="text-left">
+                                                                    <span ng-repeat="produit in item.products">
+                                                                         <span>{[{ $index+1 }]}-{[{produit.product.name}]}</span><br>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                                    <span class="table-title">current Quantity:</span>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <span class="table-title green">{[{ item.currentWeight }]} TM</span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                                    <span class="table-title">contracted Quantity:</span>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <span class="table-title green">{[{ item.barge.tanks| quantityByProduct: 'volume' }]} TM</span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                                    <span class="table-title">loaded Quantity:</span>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <span class="table-title green">{[{  item.loadedWeight}]} TM</span>
+                                                                </td>
+                                                            </tr>
+                                                            {#<tr>#}
+                                                            {#<td>#}
+                                                            {#<img class="icon-table-details"#}
+                                                            {#src="{{ asset('custom_assets/images/icons/qantity.png') }}">#}
+                                                            {#<span class="table-title">unloaded Quantity:</span>#}
+                                                            {#</td>#}
+                                                            {#<td class="text-right">#}
+                                                            {#<span class="table-title green">{[{ item.unloadedWeight}]} TM</span>#}
+                                                            {#</td>#}
+                                                            {#</tr>#}
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/ic_call.png') }}">
+                                                                    <span class="table-title">Loading: </span>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    {[{item.loadingDate | date:'dd MMMM yyyy HH:mm':'UTC' }]} UTC
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/ic_eta.png') }}">
+                                                                    <span class="table-title">Exit Voyage: </span>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    {[{item.voyageDate| date:'dd MMMM yyyy HH:mm':'UTC'
+                                                                    }]} UTC
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/ic_call.png') }}">
+                                                                    <span class="table-title">Unloading</span>
+                                                                </td>
+                                                                <td class="text-right">{[{item.unloadingDate | date:'dd MMMM yyyy HH:mm':'UTC' }]} UTC
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                        <div class="row port-det">
+                                                            <div class="col-sm-1  col-xs-1">
+                                                                <div class="port_dep">
+                                                                    <img width="25" class=""
+                                                                         src="{{ asset('custom_assets/images/icons/pin_loading.png') }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-sm-10 col-xs-10 ports">
+                                                                <div class="row">
+                                                                    <div class="col-sm-offset-4 col-xs-offset-4 col-sm-4 col-xs-4">
+                                                                        <img width="48"
+                                                                             src="{{ asset('custom_assets/images/icons/barge_green.png') }}">
+                                                                    </div>
+                                                                </div>
+
+                                                            </div>
+                                                            <div class="col-sm-1 col-xs-1">
+                                                                <div class="port_arr">
+                                                                    <img width="25"
+                                                                         src="{{ asset('custom_assets/images/icons/ppin_unloading.png') }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="portLo col-sm-6 text-left">
+                                                                    {[{item.loadingPort.name}]}
+                                                                </div>
+                                                                <div class="portLo col-sm-6 text-right">
+                                                                    {[{item.unloadingPort.name}]}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="table-responsive tanks" ng-init="total=0">
+                                                            <div class="tank-list-details">Tank details</div>
+
+                                                            <div class="details-tank"
+                                                                 ng-repeat="tranc in item.barge.tanks"
+                                                                 ng-init="total=0">
+                                                                <div class="row">
+                                                                    <div class="col-sm-6 col-xs-6">
+                                                                        <span class="title-tank">Tanks/Slobtanks</span>
+                                                                    </div>
+                                                                    <div class="col-sm-6 col-xs-6">
+                                                                        <div class="text-right">
+                                                                            <div class="media-right">
+
+                                                                            </div>
+                                                                            <div class="media-body">
+                                                                                <div class="media-heading">
+
+                                                                                    <a href="#"
+                                                                                       class="letter-icon-title">
+                                                                                        <span class="value-tank">{[{ tranc.name }]} </span>
+                                                                                    </a>
+                                                                                    <a href="#"
+                                                                                       ng-if="tranc.isSlopTank==false"
+                                                                                       class="btn bg-yellow btn-rounded btn-icon btn-xs"><span
+                                                                                                class="letter-icon"></span></a>
+                                                                                    <a href="#"
+                                                                                       ng-if="tranc.isSlopTank==true"
+                                                                                       class="btn bg-gray btn-rounded btn-icon btn-xs"><span
+                                                                                                class="letter-icon"></span></a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-sm-3 col-xs-3"><span
+                                                                                class="title-tank">Quantity</span></div>
+                                                                    <div class="col-sm-3 col-xs-3 text-right"><span
+                                                                                class="value-tank">{[{tranc.volume }]} TM</span>
+                                                                    </div>
+                                                                    <div class="col-sm-3 col-xs-3"><span
+                                                                                class="title-tank">Dielectric</span>
+                                                                    </div>
+                                                                    <div class="col-sm-3 col-xs-3 text-right">
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentDielectric!=null">{[{tranc.currentDielectric}]}°C</span>
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentDielectric==null">ND</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-sm-4 col-xs-4"><span
+                                                                                class="title-tank">Temperature </span>
+                                                                    </div>
+                                                                    <div class="col-sm-2 col-xs-2 text-right">
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentTemperature!=null">{[{tranc.currentTemperature}]}°C</span>
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentTemperature==null">ND</span>
+                                                                    </div>
+                                                                    <div class="col-sm-4 col-xs-4"><span
+                                                                                class="title-tank">current quantity </span>
+                                                                    </div>
+                                                                    <div class="col-sm-2 col-xs-2 text-right">
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentquantity!=null">{[{tranc.currentquantity}]}  TM</span>
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentquantity==null">ND</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            {#<table  class="table tableDetails text-nowrap" ng-repeat="tranc in item.barge.tanks" >#}
+                                                            {#<tbody class="tank-btn" ng-init="total=0">#}
+                                                            {#<tr>#}
+                                                            {#<td>Tanks/Slobtanks</td>#}
+                                                            {#<td>#}
+                                                            {#<div class="text-right">#}
+                                                            {#<div class="media-right">#}
+
+                                                            {#</div>#}
+                                                            {#<div class="media-body">#}
+                                                            {#<div class="media-heading">#}
+
+                                                            {#<a href="#"#}
+                                                            {#class="letter-icon-title">#}
+                                                            {#<span class="txt-yellow">{[{ tranc.name }]} </span>#}
+                                                            {#</a>#}
+                                                            {#<a href="#" ng-if="tranc.isSlopTank==false"#}
+                                                            {#class="btn bg-yellow btn-rounded btn-icon btn-xs"><span#}
+                                                            {#class="letter-icon"></span></a>#}
+                                                            {#<a href="#" ng-if="tranc.isSlopTank==true"#}
+                                                            {#class="btn bg-gray btn-rounded btn-icon btn-xs"><span#}
+                                                            {#class="letter-icon"></span></a>#}
+                                                            {#</div>#}
+                                                            {#</div>#}
+                                                            {#</div>#}
+                                                            {#</td>#}
+                                                            {#</tr>#}
+                                                            {#<tr>#}
+                                                            {#<td>Quantity</td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.volume }]}</h6>#}
+                                                            {#</td>#}
+                                                            {#</tr>#}
+                                                            {#<tr>#}
+                                                            {#<td>Dielectric</td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.currentDielectric}]}</h6>#}
+                                                            {#</td>#}
+                                                            {#</tr>#}
+                                                            {#<tr>#}
+                                                            {#<td>Temperature</td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.currentTemperature}]}</h6>#}
+                                                            {#</td>#}
+                                                            {#</tr>#}
+                                                            {#<tr>#}
+                                                            {#<td>current quantity </td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.current quantity }]}</h6>#}
+                                                            {#</td>#}
+                                                            {#</tr>#}
+                                                            {#</tbody>#}
+                                                            {#</table>#}
+
+
+                                                            {#<table class="table tableDetails text-nowrap">#}
+                                                            {#<thead>#}
+                                                            {#<tr>#}
+                                                            {#<th>Tanks/Slobtanks</th>#}
+                                                            {#<th>Quantity</th>#}
+                                                            {#<th>Dielectric</th>#}
+                                                            {#<th>Temperature</th>#}
+                                                            {#</tr>#}
+                                                            {#</thead>#}
+                                                            {#<tbody class="tank-btn" ng-init="total=0">#}
+                                                            {#<tr ng-repeat="tranc in item.barge.tanks"  >#}
+                                                            {#<td>#}
+                                                            {#<div class="media-left media-middle">#}
+                                                            {#<a href="#" ng-if="tranc.isSlopTank==false"#}
+                                                            {#class="btn bg-yellow btn-rounded btn-icon btn-xs"><span#}
+                                                            {#class="letter-icon"></span></a>#}
+                                                            {#<a href="#" ng-if="tranc.isSlopTank==true"#}
+                                                            {#class="btn bg-gray btn-rounded btn-icon btn-xs"><span#}
+                                                            {#class="letter-icon"></span></a>#}
+                                                            {#</div>#}
+                                                            {#<div class="media-body">#}
+                                                            {#<div class="media-heading">#}
+                                                            {#<a href="#"#}
+                                                            {#class="letter-icon-title">#}
+                                                            {#<span class="txt-yellow">{[{ tranc.name }]} </span>#}
+                                                            {#</a>#}
+                                                            {#</div>#}
+                                                            {#</div>#}
+                                                            {#</td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.volume }]}</h6>#}
+                                                            {#</td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.currentDielectric}]}</h6>#}
+                                                            {#</td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.currentTemperature}]}</h6>#}
+                                                            {#</td>#}
+                                                            {#</tr>#}
+                                                            {#</tbody>#}
+                                                            {#</table>#}
+                                                        </div>
+                                                        <div class="row"
+                                                             style="display: flex; margin-left: 21px;  margin-top: 15px;">
+                                                            <a class="btn btnDensity btndefault "
+                                                               ng-class="!item.customValues ? 'btn-bg-green' : 'btn-bg-white'"
+                                                               data-toggle="modal"
+                                                               data-target="#myModaldensity"
+                                                               ng-click="getDensityDefaultData($index,item.id,1,item.customValues)">
+                                                                {#ng-click="getDensityDefaultData($index,item.id);switchDefault(item.id,item.customValues,$index)">#}
+                                                                Default density
+                                                            </a>
+                                                            <a class="btn btnDensity btnCustom "
+                                                               ng-class=" item.customValues ? 'btn-bg-green' : 'btn-bg-white'"
+                                                               ng-class="class2"
+                                                               data-toggle="modal"
+                                                               data-target="#myModaldensityCustom"
+                                                               ng-click="getDensityDefaultData($index,item.id,2,item.customValues)">
+                                                                {#ng-click="getDensityDefaultData($index);switchCustom(item.id,item.customValues)">#}
+                                                                Custom density
+                                                            </a>
+                                                        </div>
+                                                        <div class="row btn-details">
+                                                            <a btn-details=""
+                                                               myindex="item.id"
+                                                               datatype="progress"
+                                                               class="btn">details</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade in" ng-class="{'active': $storage.idType == 'planned'}"
+                                     id="tab2default">
+                                    <div class="panel-group" id="accordion2">
+                                        <button class="btn expandedBtn"
+                                                show-allplanned=""
+                                                ng-click="toggleExpandedplanned = !toggleExpandedplanned">
+                                            expanded All <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                        </button>
+                                        <div class="panel" ng-repeat="item in bargesPlanned">
+                                            <div class="panel-heading  list-nessekade"
+                                                 ng-class="{ activeBg : item.active}">
+                                                <h6 class="panel-title">{[{item.ref}]}&nbsp;&nbsp;&nbsp;
+                                                   <span ng-switch="item.status">
+                                                        <span class="status status-created"
+                                                              ng-switch-when="1">CREATED</span>
+                                                        <span class="status status-preload" ng-switch-when="2">PRELOADING CONFIRMED</span>
+                                                        <span class="status status"
+                                                              ng-switch-when="3">LOADING CONFIMED</span>
+                                                        <span class="status status"
+                                                              ng-switch-when="4">EXIT CONFIRMED</span>
+                                                        <span class="status status"
+                                                              ng-switch-when="5">ARRIVAL CONFIRMED</span>
+                                                        <span class="status status-unload" ng-switch-when="6">UNLOADING CONFIRMED</span>
+                                                        <span class="status status" ng-switch-when="99">CANCELED</span>
+                                                        <span class="status status" ng-switch-default>No status</span>
+                                                    </span></h6>
+                                                <div class="">
+                                                    <ul class="icons-list">
+                                                        {#<li class="alert-collapse-tech">#}
+                                                            {#<img width="15"#}
+                                                                 {#src="{{ asset('custom_assets/images/icons/ic_technique.png') }}">#}
+                                                        {#</li>#}
+                                                        <li class="alert-collapse-fonc">
+                                                            <img width="15"
+                                                                 src="{{ asset('custom_assets/images/icons/ic_functional.png') }}">
+                                                        </li>
+                                                        <li>
+                                                            <a data-action="collapse"
+                                                               data-toggle="collapse"
+                                                               ng-click="showChildsbargesPlanned($index)"
+                                                               data-parent="#accordion2"
+                                                               href="#collapsePlanned{[{ $index }]}"></a>
+                                                        </li>
+
+                                                    </ul>
+                                                </div>
+                                                <div class="table-barge row">
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="" width="19"
+                                                             src="{{ asset('custom_assets/images/icons/ic_loading2.png') }}">
+
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            {[{item.loadingPort.name}]}<br>
+                                                            {[{item.loadingDate | date:'dd/MM/yyyy HH:mm':'UTC' }]} UTC </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="" width="19"
+                                                             src="{{ asset('custom_assets/images/icons/ic_unloading2.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                           {[{item.unloadingPort.name}]}<br>
+                                                            {[{item.unloadingDate | date:'dd/MM/yyyy HH:mm':'UTC' }]} UTC </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="table-barge row">
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            current Quantity:<br>
+                                                           {[{ item.currentWeight }]} TM</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            contracted Quantity:<br>
+                                                           {[{ item.barge.tanks| quantityByProduct: 'volume' }]} TM</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="table-barge row">
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            loaded Quantity:<br>
+                                                           {[{  item.loadedWeight}]} TM</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            unloaded Quantity:<br>
+                                                           ND</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="table-barge row">
+                                                    <div class="col-sm-12 col-xs-12">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/ic-product.png') }}">
+
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            products<br>
+                                                                <span ng-repeat="produit in item.products">
+                                                                    <span>{[{ $index+1 }]}-{[{produit.product.name}]}</span><br>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div id="collapsePlanned{[{ $index }]}"
+                                                 class="panel-collapse panel-planned collapse"
+                                                 ng-class="{ in : $storage.idDetails==item.id }">
+                                                <div class="panel-body">
+                                                    <div class="details-barge ">
+                                                        <div class="title row">
+                                                            <div class="title_left col-sm-6 col-xs-6">
+                                                                <img class="barge_blanc"
+                                                                     src="{{ asset('custom_assets/images/icons/barge_blanc.png') }}">
+                                                                {[{item.barge.name}]}
+                                                            </div>
+                                                            <div class="title_right col-sm-6 col-xs-6 text-right">
+                                                                {[{item.createdDate | date:'dd MMMM yyyy HH:mm':'UTC'
+                                                                }]} UTC
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-details table-borderless table-xs content-group-sm">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/ic-product.png') }}">
+                                                                    <span class="table-title"> Products:</span>
+                                                                </td>
+                                                                <td class="text-left">
+                                                                    <span ng-repeat="produit in item.products">
+                                                                         <span>*{[{produit.product.name}]}</span><br>
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                                    <span class="table-title">current Quantity:</span>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <span class="table-title green">{[{ item.currentWeight }]} TM</span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                                    <span class="table-title">contracted Quantity:</span>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <span class="table-title green">{[{ item.barge.tanks | quantityByProduct: 'volume' }]} TM</span>
+                                                                </td>
+                                                            </tr>
+                                                            {#<tr>#}
+                                                            {#<td>#}
+                                                            {#<img class="icon-table-details"#}
+                                                            {#src="{{ asset('custom_assets/images/icons/qantity.png') }}">#}
+                                                            {#<span class="table-title">loaded Quantity:</span>#}
+                                                            {#</td>#}
+                                                            {#<td class="text-right">#}
+                                                            {#<span class="table-title green">{[{  item.loadedWeight}]} TM</span>#}
+                                                            {#</td>#}
+                                                            {#</tr>#}
+                                                            {#<tr>#}
+                                                            {#<td>#}
+                                                            {#<img class="icon-table-details"#}
+                                                            {#src="{{ asset('custom_assets/images/icons/qantity.png') }}">#}
+                                                            {#<span class="table-title">unloaded Quantity:</span>#}
+                                                            {#</td>#}
+                                                            {#<td class="text-right">#}
+                                                            {#<span class="table-title green">{[{ item.unloadedWeight}]} TM</span>#}
+                                                            {#</td>#}
+                                                            {#</tr>#}
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/ic_call.png') }}">
+                                                                    <span class="table-title">Loading: </span>
+                                                                </td>
+                                                                <td class="text-right">{[{item.loadingDate | date:'dd MMMM yyyy HH:mm':'UTC' }]} UTC
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/ic_eta.png') }}">
+                                                                    <span class="table-title">Exit Voyage: </span>
+                                                                </td>
+                                                                <td class="text-right">{[{item.voyageDate| date:'dd MMMM yyyy HH:mm':'UTC' }]} UTC
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/ic_call.png') }}">
+                                                                    <span class="table-title">  Unloading: </span>
+                                                                </td>
+                                                                <td class="text-right">{[{item.unloadingDate | date:'dd MMMM yyyy HH:mm':'UTC' }]} UTC
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                        <div class="row port-det">
+                                                            <div class="col-sm-1  col-xs-1">
+                                                                <div class="port_dep">
+                                                                    <img width="25" class=""
+                                                                         src="{{ asset('custom_assets/images/icons/pin_loading.png') }}">
+                                                                    <img width="48" class="planned-barge"
+                                                                         src="{{ asset('custom_assets/images/icons/barge_green.png') }}">
+                                                                </div>
+
+
+                                                            </div>
+                                                            <div class=" col-sm-10 col-xs-10 ports">
+                                                                {#<div class="row">#}
+                                                                {#<div class="col-sm-offset-4 col-xs-offset-4 col-sm-4 col-xs-4">#}
+                                                                {#<img width="48"#}
+                                                                {#src="{{ asset('custom_assets/images/icons/barge_green.png') }}">#}
+                                                                {#</div>#}
+                                                                {#</div>#}
+
+                                                            </div>
+                                                            <div class="col-sm-1 col-xs-1">
+                                                                <div class="port_arr">
+                                                                    <img width="25"
+                                                                         src="{{ asset('custom_assets/images/icons/ppin_unloading.png') }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="portLo col-sm-6 text-left">
+                                                                    {[{item.loadingPort.name}]}
+                                                                </div>
+                                                                <div class="portLo col-sm-6 text-right">
+                                                                    {[{item.unloadingPort.name}]}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="table-responsive tanks" ng-init="total=0">
+                                                            <div class="tank-list-details">Tank details</div>
+
+                                                            <div class="details-tank"
+                                                                 ng-repeat="tranc in item.barge.tanks"
+                                                                 ng-init="total=0">
+                                                                <div class="row">
+                                                                    <div class="col-sm-6 col-xs-6">
+                                                                        <span class="title-tank">Tanks/Slobtanks</span>
+                                                                    </div>
+                                                                    <div class="col-sm-6 col-xs-6">
+                                                                        <div class="text-right">
+                                                                            <div class="media-right">
+
+                                                                            </div>
+                                                                            <div class="media-body">
+                                                                                <div class="media-heading">
+
+                                                                                    <a href="#"
+                                                                                       class="letter-icon-title">
+                                                                                        <span class="value-tank">{[{ tranc.name }]} </span>
+                                                                                    </a>
+                                                                                    <a href="#"
+                                                                                       ng-if="tranc.isSlopTank==false"
+                                                                                       class="btn bg-yellow btn-rounded btn-icon btn-xs"><span
+                                                                                                class="letter-icon"></span></a>
+                                                                                    <a href="#"
+                                                                                       ng-if="tranc.isSlopTank==true"
+                                                                                       class="btn bg-gray btn-rounded btn-icon btn-xs"><span
+                                                                                                class="letter-icon"></span></a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-sm-3 col-xs-3"><span
+                                                                                class="title-tank">Quantity</span></div>
+                                                                    <div class="col-sm-3 col-xs-3 text-right"><span
+                                                                                class="value-tank">{[{tranc.volume }]} TM</span>
+                                                                    </div>
+                                                                    <div class="col-sm-3 col-xs-3"><span
+                                                                                class="title-tank">Dielectric</span>
+                                                                    </div>
+                                                                    <div class="col-sm-3 col-xs-3 text-right">
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentDielectric!=null">{[{tranc.currentDielectric}]}°C</span>
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentDielectric==null">ND</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-sm-4 col-xs-4"><span
+                                                                                class="title-tank">Temperature </span>
+                                                                    </div>
+                                                                    <div class="col-sm-2 col-xs-2 text-right">
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentTemperature!=null">{[{tranc.currentTemperature}]}°C</span>
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentTemperature==null">ND</span>
+                                                                    </div>
+                                                                    <div class="col-sm-4 col-xs-4"><span
+                                                                                class="title-tank">current quantity </span>
+                                                                    </div>
+                                                                    <div class="col-sm-2 col-xs-2 text-right">
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentquantity!=null">{[{tranc.currentquantity}]}  TM</span>
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentquantity==null">ND</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {#<table class="table tableDetails text-nowrap">#}
+                                                            {#<thead>#}
+                                                            {#<tr>#}
+                                                            {#<th>Tanks/Slobtanks</th>#}
+                                                            {#<th>Quantity</th>#}
+                                                            {#<th>Dielectric</th>#}
+                                                            {#<th>Temperature</th>#}
+                                                            {#</tr>#}
+                                                            {#</thead>#}
+                                                            {#<tbody class="tank-btn" ng-init="total=0">#}
+                                                            {#<tr ng-repeat="tranc in item.barge.tanks"  >#}
+                                                            {#<td>#}
+                                                            {#<div class="media-left media-middle">#}
+                                                            {#<a href="#" ng-if="tranc.isSlopTank==false"#}
+                                                            {#class="btn bg-yellow btn-rounded btn-icon btn-xs"><span#}
+                                                            {#class="letter-icon"></span></a>#}
+                                                            {#<a href="#" ng-if="tranc.isSlopTank==true"#}
+                                                            {#class="btn bg-gray btn-rounded btn-icon btn-xs"><span#}
+                                                            {#class="letter-icon"></span></a>#}
+                                                            {#</div>#}
+                                                            {#<div class="media-body">#}
+                                                            {#<div class="media-heading">#}
+                                                            {#<a href="#"#}
+                                                            {#class="letter-icon-title">#}
+                                                            {#<span class="txt-yellow">{[{ tranc.name }]} </span>#}
+                                                            {#</a>#}
+                                                            {#</div>#}
+                                                            {#</div>#}
+                                                            {#</td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.volume }]}</h6>#}
+                                                            {#</td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.currentDielectric}]}</h6>#}
+                                                            {#</td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.currentTemperature}]}</h6>#}
+                                                            {#</td>#}
+                                                            {#</tr>#}
+                                                            {#</tbody>#}
+                                                            {#</table>#}
+                                                        </div>
+
+
+                                                        <div class="row btn-details">
+                                                            <a btn-details="" myindex="item.id" datatype="planned"
+                                                               class="btn">details</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade in" ng-class="{'active': $storage.idType == 'historic'}"
+                                     id="tab3default">
+                                    <div class="panel-group" id="accordion3">
+                                        <button class="btn expandedBtn"
+                                                show-allhistoric=""
+                                                ng-click="toggleExpandedhistoric = !toggleExpandedhistoric">
+                                            expanded All <i class="fa fa-caret-right" aria-hidden="true"></i>
+                                        </button>
+                                        <div class="panel" ng-repeat="item in bargeshistoric">
+                                            <div class="panel-heading  list-nessekade"
+                                                 ng-class="{ activeBg : item.active}">
+                                                <h6 class="panel-title">{[{item.ref}]} &nbsp;&nbsp;&nbsp;
+                                                    <span ng-switch="item.status">
+                                                        <span class="status status-created"
+                                                              ng-switch-when="1">CREATED</span>
+                                                        <span class="status status-preload" ng-switch-when="2">PRELOADING CONFIRMED</span>
+                                                        <span class="status status"
+                                                              ng-switch-when="3">LOADING CONFIMED</span>
+                                                        <span class="status status"
+                                                              ng-switch-when="4">EXIT CONFIRMED</span>
+                                                        <span class="status status"
+                                                              ng-switch-when="5">ARRIVAL CONFIRMED</span>
+                                                        <span class="status status-unload" ng-switch-when="6">UNLOADING CONFIRMED</span>
+                                                        <span class="status status" ng-switch-when="99">CANCELED</span>
+                                                        <span class="status status" ng-switch-default>No status</span>
+                                                    </span>
+                                                </h6>
+                                                <div class="">
+                                                    <ul class="icons-list">
+                                                        <li><a data-action="collapse" data-toggle="collapse"
+                                                               ng-click="showChildsHis($index)"
+                                                               data-parent="#accordion3"
+                                                               href="#collapseHis{[{ $index }]}"></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+
+                                                <div class="table-barge row">
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="" width="19"
+                                                             src="{{ asset('custom_assets/images/icons/ic_loading2.png') }}">
+
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            {[{item.loadingPort.name}]}<br>
+                                                            {[{item.loadingDate | date:'dd/MM/yyyy HH:mm':'UTC' }]} UTC </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="" width="19"
+                                                             src="{{ asset('custom_assets/images/icons/ic_unloading2.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                           {[{item.unloadingPort.name}]}<br>
+                                                            {[{item.unloadingDate | date:'dd/MM/yyyy HH:mm':'UTC' }]} UTC </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="table-barge row">
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            current Quantity:<br>
+                                                           ND</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            contracted Quantity:<br>
+                                                           {[{ item.barge.tanks| quantityByProduct: 'volume' }]} TM</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="table-barge row">
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            loaded Quantity:<br>
+                                                          ND</span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6 col-xs-6">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            unloaded Quantity:<br>
+                                                           {[{  item.unloadedWeight}]} TM</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="table-barge row">
+                                                    <div class="col-sm-12 col-xs-12">
+                                                        <img class="icon-table-details" width="15"
+                                                             src="{{ asset('custom_assets/images/icons/ic-product.png') }}">
+
+                                                        <div class="right-float">
+                                                            <span class="barge-ticket">
+                                                            products<br>
+                                                                <span ng-repeat="produit in item.products">
+                                                                    <span>{[{ $index+1 }]}-{[{produit.product.name}]}</span><br>
+                                                                </span>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div id="collapseHis{[{ $index }]}"
+                                                 class="panel-collapse panel-historic collapse"
+                                                 ng-class="{ in : $storage.idDetails==item.id }">
+                                                <div class="panel-body">
+                                                    <div class="details-barge ">
+                                                        <div class="title row">
+                                                            <div class="title_left col-sm-6 col-xs-6">
+                                                                <img class="barge_blanc"
+                                                                     src="{{ asset('custom_assets/images/icons/barge_blanc.png') }}">
+                                                                {[{item.barge.name}]}
+                                                            </div>
+                                                            <div class="title_right col-sm-6 col-xs-6 text-right">
+                                                                {[{item.createdDate | date:'dd MMMM yyyy HH:mm':'UTC'
+                                                                }]} UTC
+                                                            </div>
+                                                        </div>
+                                                        <table class="table table-details table-borderless table-xs content-group-sm">
+                                                            <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/ic-product.png') }}">
+                                                                    <span class="table-title"> Products:</span>
+                                                                </td>
+                                                                <td class="text-left">
+                                                                    <span ng-repeat="produit in item.products">
+                                                                         <span>*{[{produit.product.name}]}</span><br>
+                                                                    </span>
+                                                                    {#{[{item.products[0].product.name}]}#}
+                                                                </td>
+                                                            </tr>
+                                                            {#<tr>#}
+                                                            {#<td>#}
+                                                            {#<img class="icon-table-details"#}
+                                                            {#src="{{ asset('custom_assets/images/icons/qantity.png') }}">#}
+                                                            {#<span class="table-title">current Quantity:</span>#}
+                                                            {#</td>#}
+                                                            {#<td class="text-right">#}
+                                                            {#<span class="table-title green">{[{ item.currentWeight }]} TM</span>#}
+                                                            {#</td>#}
+                                                            {#</tr>#}
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                                    <span class="table-title">contracted Quantity:</span>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <span class="table-title green">{[{ item.barge.tanks | quantityByProduct: 'volume' }]} TM</span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                                    <span class="table-title">loaded Quantity:</span>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <span class="table-title green">{[{  item.loadedWeight}]} TM</span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/qantity.png') }}">
+                                                                    <span class="table-title">unloaded Quantity:</span>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <span class="table-title green">{[{ item.unloadedWeight}]} TM</span>
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/ic_call.png') }}">
+                                                                    <span class="table-title">Loading: </span>
+                                                                </td>
+                                                                <td class="text-right">{[{item.loadingDate | date:'dd MMMM yyyy HH:mm':'UTC' }]} UTC
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/ic_eta.png') }}">
+                                                                    <span class="table-title">Exit Voyage: </span>
+                                                                </td>
+                                                                <td class="text-right">{[{item.voyageDate| date:'dd MMMM yyyy HH:mm':'UTC' }]} UTC
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <img class="icon-table-details"
+                                                                         src="{{ asset('custom_assets/images/icons/ic_call.png') }}">
+                                                                    <span class="table-title">  Unloading: </span>
+                                                                </td>
+                                                                <td class="text-right">{[{item.unloadingDate | date:'ddMMMM yyyy HH:mm':'UTC' }]} UTC
+                                                                </td>
+                                                            </tr>
+                                                            </tbody>
+                                                        </table>
+
+                                                        <div class="row port-det">
+                                                            <div class="col-sm-1  col-xs-1">
+                                                                <div class="port_dep">
+                                                                    <img width="25" class=""
+                                                                         src="{{ asset('custom_assets/images/icons/pin_loading.png') }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class=" col-sm-10 col-xs-10 ports">
+                                                                {#<div class="row">#}
+                                                                {#<div class="col-sm-offset-4 col-xs-offset-4 col-sm-4 col-xs-4">#}
+                                                                {#<img width="48"#}
+                                                                {#src="{{ asset('custom_assets/images/icons/barge_green.png') }}">#}
+                                                                {#</div>#}
+                                                                {#</div>#}
+
+                                                            </div>
+                                                            <div class="col-sm-1 col-xs-1">
+                                                                <div class="port_arr">
+                                                                    <img width="48" class="historic-barge"
+                                                                         src="{{ asset('custom_assets/images/icons/barge_green.png') }}">
+                                                                    <img width="25"
+                                                                         src="{{ asset('custom_assets/images/icons/ppin_unloading.png') }}">
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="portLo col-sm-6 text-left">
+                                                                    {[{item.loadingPort.name}]}
+                                                                </div>
+                                                                <div class="portLo col-sm-6 text-right">
+                                                                    {[{item.unloadingPort.name}]}
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="table-responsive tanks" ng-init="total=0">
+                                                            <div class="tank-list-details">Tank details</div>
+
+                                                            <div class="details-tank"
+                                                                 ng-repeat="tranc in item.barge.tanks"
+                                                                 ng-init="total=0">
+                                                                <div class="row">
+                                                                    <div class="col-sm-6 col-xs-6">
+                                                                        <span class="title-tank">Tanks/Slobtanks</span>
+                                                                    </div>
+                                                                    <div class="col-sm-6 col-xs-6">
+                                                                        <div class="text-right">
+                                                                            <div class="media-right">
+
+                                                                            </div>
+                                                                            <div class="media-body">
+                                                                                <div class="media-heading">
+
+                                                                                    <a href="#"
+                                                                                       class="letter-icon-title">
+                                                                                        <span class="value-tank">{[{ tranc.name }]} </span>
+                                                                                    </a>
+                                                                                    <a href="#"
+                                                                                       ng-if="tranc.isSlopTank==false"
+                                                                                       class="btn bg-yellow btn-rounded btn-icon btn-xs"><span
+                                                                                                class="letter-icon"></span></a>
+                                                                                    <a href="#"
+                                                                                       ng-if="tranc.isSlopTank==true"
+                                                                                       class="btn bg-gray btn-rounded btn-icon btn-xs"><span
+                                                                                                class="letter-icon"></span></a>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-sm-3 col-xs-3"><span
+                                                                                class="title-tank">Quantity</span></div>
+                                                                    <div class="col-sm-3 col-xs-3 text-right"><span
+                                                                                class="value-tank">{[{tranc.volume }]} TM</span>
+                                                                    </div>
+                                                                    <div class="col-sm-3 col-xs-3"><span
+                                                                                class="title-tank">Dielectric</span>
+                                                                    </div>
+                                                                    <div class="col-sm-3 col-xs-3 text-right">
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentDielectric!=null">{[{tranc.currentDielectric}]}°C</span>
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentDielectric==null">ND</span>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="row">
+                                                                    <div class="col-sm-4 col-xs-4"><span
+                                                                                class="title-tank">Temperature </span>
+                                                                    </div>
+                                                                    <div class="col-sm-2 col-xs-2 text-right">
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentTemperature!=null">{[{tranc.currentTemperature}]}°C</span>
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentTemperature==null">ND</span>
+                                                                    </div>
+                                                                    <div class="col-sm-4 col-xs-4"><span
+                                                                                class="title-tank">current quantity </span>
+                                                                    </div>
+                                                                    <div class="col-sm-2 col-xs-2 text-right">
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentquantity!=null">{[{tranc.currentquantity}]}  TM</span>
+                                                                        <span class="value-tank"
+                                                                              ng-if="tranc.currentquantity==null">ND</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            {#<table class="table tableDetails text-nowrap">#}
+                                                            {#<thead>#}
+                                                            {#<tr>#}
+                                                            {#<th>Tanks/Slobtanks</th>#}
+                                                            {#<th>Quantity</th>#}
+                                                            {#<th>Dielectric</th>#}
+                                                            {#<th>Temperature</th>#}
+                                                            {#</tr>#}
+                                                            {#</thead>#}
+                                                            {#<tbody class="tank-btn" ng-init="total=0">#}
+                                                            {#<tr ng-repeat="tranc in item.barge.tanks"  >#}
+                                                            {#<td>#}
+                                                            {#<div class="media-left media-middle">#}
+                                                            {#<a href="#" ng-if="tranc.isSlopTank==false"#}
+                                                            {#class="btn bg-yellow btn-rounded btn-icon btn-xs"><span#}
+                                                            {#class="letter-icon"></span></a>#}
+                                                            {#<a href="#" ng-if="tranc.isSlopTank==true"#}
+                                                            {#class="btn bg-gray btn-rounded btn-icon btn-xs"><span#}
+                                                            {#class="letter-icon"></span></a>#}
+                                                            {#</div>#}
+                                                            {#<div class="media-body">#}
+                                                            {#<div class="media-heading">#}
+                                                            {#<a href="#"#}
+                                                            {#class="letter-icon-title">#}
+                                                            {#<span class="txt-yellow">{[{ tranc.name }]} </span>#}
+                                                            {#</a>#}
+                                                            {#</div>#}
+                                                            {#</div>#}
+                                                            {#</td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.volume }]}</h6>#}
+                                                            {#</td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.currentDielectric}]}</h6>#}
+                                                            {#</td>#}
+                                                            {#<td>#}
+                                                            {#<h6 class="text-semibold no-margin text-right">{[{tranc.currentTemperature}]}</h6>#}
+                                                            {#</td>#}
+                                                            {#</tr>#}
+                                                            {#</tbody>#}
+                                                            {#</table>#}
+                                                        </div>
+                                                        <div class="row btn-details">
+                                                            <a btn-details="" myindex="item.id" datatype="historic"
+                                                               class="btn">details</a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-barge-progress second-side" ng-hide="!hideConfig ">
+                    <ul class="list-second-side">
+                        <li><a ng-click="gotoConfigalerts()"><i class="fa fa-sliders" aria-hidden="true"></i>Configuring
+                                Alerts</a></li>
+                        <li><a ng-click="gotoAccount()"><i class="fa fa-user fa-lg" aria-hidden="true"></i>account</a>
+                        </li>
+                        <li><a ng-click="gotoPasswordchange()"><i class="fa fa-lock fa-lg"></i>change password</a></li>
+                        <li><a href="{{ path('logout') }}"><i class="fa fa-sign-out fa-lg" aria-hidden="true"></i>logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="row barge_details" id="entete-page">
+                <div class="row entete-page">
+                    <div class="col-lg-4 col-md-6 col-sm-6  col-xs-12" style="padding-right: 15px;">
+                        <div class="row time-date">
+                            <div class="col-lg-7 col-md-7 col-sm-7  col-xs-7">
+                                <span class="loading-port">loading port</span><br>
+                                <span class="loading-port loading-port-title">{[{ cuurentVoyage.loadingPort.name }]}</span><br><br>
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-5  col-xs-5 text-right">
+                                <div class="loading-port-time">{[{cuurentVoyage.loadingDate | date:'HH:mm':'UTC' }]}</div>
+                                <div class="loading-port-date">{[{cuurentVoyage.loadingDate | date:'dd/MM/yyyy':'UTC' }]}</div>
+                            </div>
+                        </div>
+                        <div class="row time-date">
+                            <div class="col-lg-7 col-md-7 col-sm-7  col-xs-7">
+                                <span class="loading-port">unloading port</span><br>
+                                <span class="loading-port loading-port-title">{[{ cuurentVoyage.unloadingPort.name }]}</span>
+                            </div>
+                            <div class="col-lg-5 col-md-5 col-sm-5 col-xs-5 text-right">
+                                <div class="loading-port-time">{[{cuurentVoyage.unloadingDate | date:'HH:mm':'UTC' }]}</div>
+                                <div class="loading-port-date">{[{cuurentVoyage.loadingDate | date:'dd/MM/yyyy':'UTC' }]}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6  col-xs-12" style="padding-right: 15px;">
+                        <div class="row time-date">
+                            <div class="col-lg-5 col-md-5 col-sm-5  col-xs-5 text-right">
+                                <div id="loading-quantity-graph"></div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7  col-xs-7">
+                                <span class="loading-port">loading Quantiy</span><br>
+                                <span class="loading-quantity">{[{ loadingValue }]}</span><span class="tm">TM</span><br><br>
+                            </div>
+
+                        </div>
+                        <div class="row time-date">
+                            <div class="col-lg-5 col-md-5 col-sm-5  col-xs-5 text-right">
+                                <div id="unloading-quantity-graph"></div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7  col-xs-7">
+                                <span class="loading-port">unloading Quantiy</span><br>
+                                <span class="loading-quantity">{[{ unloadingValue }]}</span><span class="tm">TM</span><br><br>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-6  col-xs-12">
+                        <div class="row time-date">
+                            <div class="col-lg-5 col-md-5 col-sm-5  col-xs-5 text-right">
+                                <div id="current-quantity-graph"></div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7  col-xs-7">
+                                <span class="loading-port">cuurent Quantiy</span><br>
+                                <span class="loading-quantity">{[{ cuurentValue }]}</span><span class="tm">TM</span><br><br>
+                            </div>
+
+                        </div>
+                        <div class="row time-date">
+                            <div class="col-lg-5 col-md-5 col-sm-5  col-xs-5 text-right">
+                                <div id="contracted-quantity-graph"></div>
+                            </div>
+                            <div class="col-lg-7 col-md-7 col-sm-7  col-xs-7">
+                                <span class="loading-port">contracted Quantiy</span><br>
+                                <span class="loading-quantity">{[{ contractedValue }]}</span><span class="tm">TM</span><br><br>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12  col-xs-12 Products-list-block">
+                            <div class="Products-list">Products</div>
+                            <div class="Products-item" ng-repeat="item in cuurentVoyage.products">
+                              <span>- {[{ item.product.name }]}</span><br>
+                            </div>
+
+                    </div>
+                </div>
+
+                <div class="list-prop graph-right list-prop-right">
+
+                    <div class="barge_structure">
+                        <div class="triangle-up"></div>
+                        <div class="demi-cercle"></div>
+                        <div class="structure-list">
+                            <div class="interne-structure"
+                                 ng-repeat="itemgraph in bargeTranc | orderBy:'-bargeTranc.indexOf(itemgraph)':true"
+                                 ng-style="{ width: itemgraph.tanks[0].isSlopTank ? '10%' : widthCompartiment}">
+                                <div ng-if="itemgraph.tanks.length>1">
+                                    <a data-toggle="modal" data-target="#myModalTranc"
+                                       data-ng-repeat="itemtanks in itemgraph.tanks"
+                                       ng-click="graphByTank(itemtanks.id, itemtanks.isSlopTank)">
+                                        <div class="mini-part">
+                                            <div class="full-part-mini top-part " style="height: 40px">
+                                                <div class="title-part">{[{ itemtanks.name }]}</div>
+                                                <div class="title-part text-right text-yellow">
+                                                    <img src="{{ asset("custom_assets/images/icons/ic_dielectric.png") }}">2.3
+                                                </div>
+                                                <div class="line-part">
+                                                    <div class="line"></div>
+                                                    <div class="temperature">145cm</div>
+                                                </div>
+                                            </div>
+                                            <div class="full-part-mini buttom-part anim-part-mini" style="height: 20px">
+                                                <div id="water-mini"></div>
+                                                <div class="qualtity">343kg</div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div ng-if="itemgraph.tanks.length==1">
+                                    <a data-toggle="modal" data-target="#myModalTranc"
+                                       ng-click="graphByTank(itemgraph.tanks[0].id, itemgraph.tanks[0].isSlopTank)">
+                                        <div class="full-part top-part " style="height: 60px; ">
+                                            <div class="title-part">{[{ itemgraph.tanks[0].name }]}
+                                                <div class="float-right ">
+                                                    <img src="{{ asset("custom_assets/images/icons/ic_temperature.png") }}">
+                                                    20°C
+                                                </div>
+                                            </div>
+                                            <div class="title-part text-right text-yellow">
+                                                <img tooltips tooltip-template="Alert2"
+                                                     tooltip-side="top"
+                                                     src="{{ asset("custom_assets/images/icons/ic_alert_rouge.png") }}">
+                                                <img src="{{ asset("custom_assets/images/icons/ic_dielectric.png") }}">2.3<br>
+                                            </div>
+                                            <div class="line-part">
+                                                <div class="line"></div>
+                                                <div class="temperature">290cm</div>
+                                            </div>
+                                        </div>
+                                        <div class="full-part buttom-part anim-part-full"  style="height: 60px">
+                                            <div id="water"></div>
+                                            <div class="qualtity">2343kg</div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="arrow-right"></div>
+                        <div class="demi-cercle-responsive"></div>
+                    </div>
+
+
+                    <div class="row info-neeskade">
+                        <div class="text-left col-sm-6">
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_pdf.png") }}" width="30">#}
+                            {#<a data-toggle="modal" data-target="#myModal">barge neeskade-info.pdf</a>#}
+                        </div>
+                        <div class="text-left col-sm-6">
+                            <p class="text-right">total=1150tm</p>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="myModal" role="dialog">
+                        <div class="modal-dialog">
+
+                            <!-- Modal content-->
+                            <div class="modal-content modal-pdf">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                    <h4 class="modal-title">barge neeskade-info.pdf</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <img src="{{ asset("custom_assets/images/dashboard/pdf_barge.png") }}"
+                                         class="img-responsive">
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {#<div id="container">#}
+                {#<div id="glass">#}
+                    {#<div id="water"></div>#}
+                {#</div>#}
+            {#</div>#}
+            <div class="row barge_details">
+                <div class="list-prop list-prop-graph list-prop-left">
+                    <div class="title-graph">
+                        volume/Speed
+
+                    </div>
+                    <div class="row">
+                        {#<div id="chartdiv"></div>#}
+                        <div id="chartdivCourbe"></div>
+                    </div>
+                </div>
+                <div class="list-prop list-prop-graph list-prop-right list-prop-map">
+                    <div class="" my-mapdetails="">
+                    </div>
+                </div>
+            </div>
+            <div class="row barge_details">
+                <div class="list-prop list-prop-graph list-prop-left">
+                    <div class="title-graph">level (TM)</div>
+                    <div class="row">
+                        <div id="chartdivlevel"></div>
+                    </div>
+                </div>
+                <div class="list-prop list-prop-graph list-prop-right">
+                    <div class="title-graph">temperature(C)
+                    </div>
+                    <div class="row">
+                        <div id="chartdivtemperature"></div>
+                    </div>
+
+                </div>
+
+                <div class="list-prop list-prop-graph list-prop-left">
+                    <div class="title-graph">density(g/cm3)
+                    </div>
+                    <div class="row">
+                        <div id="chartdivdensity"></div>
+                    </div>
+                </div>
+                <div class="list-prop list-prop-graph list-prop-right">
+                    <div class="title-graph">QUALITY CONSTANT
+                    </div>
+                    <div class="row">
+                        <div id="chartdivquality"></div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="row barge_details">
+                <div class="list-prop list-prop-left">
+                    <div class="row internel-elem">
+                        <div class="col-lg-6 col-md-6 col-sm-6  col-xs-6">
+                            <span class="title-prop">Europ Nr:</span> <span class="details-prop">02318979</span> <br>
+                            <span class="title-prop">Metering:</span> <span
+                                    class="details-prop">80,00 mx9,50mx2,82m</span>
+                            <br>
+                            <span class="title-prop">Gross Tonnage:</span><span class="details-prop">1253,529 ton</span>
+                            <br>
+                            <span class="title-prop">Years built:</span> <span class="details-prop">1963/1994</span>
+                            <br>
+                            <span class="title-prop">PDV Nr:</span> <span class="details-prop">PDV113597</span><br>
+                            <span class="title-prop">Class Office:</span> <span class="details-prop">NSI</span> <br>
+
+                            <img src="{{ asset("custom_assets/images/icons/ic_pdf.png") }}" width="20">
+                            <a class="pdf-link" data-toggle="modal" data-target="#myModal">barge neeskade-info.pdf</a>
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-6  col-xs-6">
+                            <span class="title-prop">Freighter:</span> <span
+                                    class="details-prop"> Maaskade              </span> <br>
+                            <span class="title-prop">Owner:</span> <span class="details-prop"> Johan Junger      </span>
+                            <br>
+                            <span class="title-prop">Status:</span> <span
+                                    class="details-prop"> Active                 </span> <br>
+                            <span class="title-prop">Call Sign:</span> <span
+                                    class="details-prop"> 0657310031          </span> <br>
+                            <span class="title-prop">Engine:</span> <span
+                                    class="details-prop"> Mishubishi           </span><br>
+                            <span class="title-prop">Power :</span> <span class="details-prop"> 900 PK           </span>
+                            <br>
+                        </div>
+                    </div>
+                </div>
+                <div class="list-prop list-prop-graph list-prop-imgpdf list-prop-left">
+                    <div class="title-imgpdf">
+                        freight release info
+                    </div>
+                    <img class="img-freight img-responsive"
+                         src="{{ asset("custom_assets/images/dashboard/freight_release_pdf.png") }}">
+                </div>
+            </div>
+        </div>
+        <!-- Modal -->
+        <div class="modal fade" id="myModalTranc" role="dialog">
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row details-tank">
+                            <div class="col-sm-6 col-xs-12">
+                                <a href="#" class="btn bg-yellow btn-rounded btn-icon btn-xs "><span
+                                            class="letter-icon"></span></a>
+                                <span>TANK1 SBB MID</span>
+                                <div class="row">
+                                    <div class="col-sm-5 col-xs-6">
+                                        <img class="img-popup"
+                                             src="{{ asset("custom_assets/images/icons/ic_dielectric.png") }}">
+                                        <span class="details-delect">2.3</span>
+                                    </div>
+                                    <div class="col-sm-5 col-xs-6">
+                                        <img class="img-popup"
+                                             src="{{ asset("custom_assets/images/icons/ic_temperature.png") }}">
+                                        <span class="details-delect"> 20°C </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-xs-12 right-content">
+                                <span class="product">PRODUCTS</span>
+                                <div class="row">
+                                    <div class="col-sm-8 col-xs-8 right-content">
+                                        <span class="details-delect2">High oleic sunflower oil</span>
+                                    </div>
+                                    <div class="col-sm-4 col-xs-4 right-content  text-right">
+                                        <span class="details-delect3 green"> 2343KG</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row graph-courbe">
+                            <div class="col-sm-6 col-xs-12  margin-right">
+                                <div class="title-graph">
+                                    level (TM)
+                                </div>
+                                <div class="row">
+                                    <div id="chartdivquality2"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-xs-12" ng-show="!snobTrank">
+                                <div class="title-graph">temperature(C)
+                                </div>
+                                <div class="row">
+                                    <div id="chartdivquality3"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-xs-12 margin-right" ng-show="!snobTrank">
+                                <div class="title-graph">density(g/cm3)
+                                </div>
+                                <div class="row">
+                                    <div id="chartdivquality4"></div>
+                                </div>
+
+                            </div>
+                            <div class="col-sm-6 col-xs-12" ng-show="!snobTrank">
+                                <div class="title-graph">QUALITY CONSTANT
+                                </div>
+                                <div class="row">
+                                    <div id="chartdivquality5"></div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModaldensity" role="dialog">
+            <div class="sample sample-density">
+                <div class="box small" dw-loading="sample-density"
+                     dw-loading-options="{active: true, text: '', className: 'custom-loading', spinnerOptions: {lines: 8, length: 10, width: 3, radius: 5, color: '#00844e', direction: -1, speed: 2}}">
+                </div>
+            </div>
+
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Average density</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table text-nowrap">
+                            <thead>
+                            <tr>
+                                <th>Produits</th>
+                                <th>Temperature</th>
+                                <th>Density</th>
+                            </tr>
+                            </thead>
+                            <tbody class="tank-btn">
+                            <tr ng-repeat="itemDensityDefault in bargesDefault">
+                                <td>
+                                    <h6 class="text-semibold no-margin">{[{ itemDensityDefault.product.name }]}</h6>
+                                </td>
+                                <td>
+                                    <h6 class="text-semibold no-margin">
+                                        {[{itemDensityDefault.product.temp == null ? '' :
+                                        itemDensityDefault.product.temp}]} °C
+                                    </h6>
+                                </td>
+                                <td>
+                                    <h6 class="text-semibold no-margin">
+                                        {[{itemDensityDefault.product.specificGravity == null ? '' :
+                                        itemDensityDefault.product.specificGravity}]}
+                                    </h6>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="myModaldensityCustom" role="dialog">
+            <div class="sample sample-density">
+                <div class="box small" dw-loading="sample-density"
+                     dw-loading-options="{active: true, text: '', className: 'custom-loading', spinnerOptions: {lines: 8, length: 10, width: 3, radius: 5, color: '#00844e', direction: -1, speed: 2}}">
+                </div>
+            </div>
+            <div class="modal-dialog">
+                <!-- Modal content-->
+                <form ng-submit="editDensity(myFormDensity)"
+                      name="myFormDensity" novalidate>
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close"
+                                    data-dismiss="modal">&times;</button>
+                            <h4 class="modal-title">Custom density </h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="alert alert-danger" ng-show="errorMesageShow">
+                                <strong>Danger!</strong> {[{ errorMesage }]}
+                            </div>
+                            <table class="table text-nowrap">
+                                <thead>
+                                <tr>
+                                    <th>Produits</th>
+                                    <th>Temperature</th>
+                                    <th>Density</th>
+                                </tr>
+                                </thead>
+                                <tbody class="tank-btn">
+                                <tr class="inputBlock"
+                                    ng-repeat="itemDensityDefault in bargesDefault">
+                                    <td>
+                                        <h6 class="text-semibold no-margin">
+                                            {[{itemDensityDefault.product.name }]}</h6>
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               ng-model="customdensityTab[$index][2]"
+                                               ng-required="true">
+                                    </td>
+                                    <td>
+                                        <input type="text"
+                                               ng-model="customdensityTab[$index][1]"
+                                               ng-required="true">
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn validate">validate</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+{% block stylesheets %}
+    <link href='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.css' rel='stylesheet'/>
+    <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all"/>
+    <link rel="stylesheet" href="{{ asset('custom_assets/css/angular-loading.css') }}" media="all"/>
+{% endblock %}
+{% block javascripts %}
+
+    <script src='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.js'></script>
+    <script src="https://www.amcharts.com/lib/3/amcharts.js"></script>
+    <script src="https://www.amcharts.com/lib/3/serial.js"></script>
+    <script src="https://www.amcharts.com/lib/3/xy.js"></script>
+    <script src="https://www.amcharts.com/lib/3/plugins/export/export.min.js"></script>
+    <script src="https://www.amcharts.com/lib/3/themes/light.js"></script>
+    <script src="https://www.amcharts.com/lib/3/themes/none.js"></script>
+    <script src="https://www.amcharts.com/lib/3/pie.js"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/angular.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/angular-animate.min.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/angular-ui-router.min.js') }}"></script>
+    <script data-require="spin.js@1.2.7" data-semver="1.2.7"
+            src="//cdnjs.cloudflare.com/ajax/libs/spin.js/1.2.7/spin.min.js"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/angular-loading.js') }}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.10/ngStorage.min.js"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/angular-tooltips.js') }}"></script>
+
+
+    <script src="https://cdn.firebase.com/js/client/2.2.4/firebase.js"></script>
+    <script src="https://cdn.firebase.com/libs/angularfire/1.1.3/angularfire.min.js"></script>
+
+    <script type="text/javascript" src="{{ asset('custom_assets/js/app/app.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/app/controllerDashboard.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/app/controllerConfigmenu.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/app/providers/firebaseService.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/app/directive/mapDashDirective.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/app/directive/mapDetailsDirective.js') }}"></script>
+    <script type="text/javascript"
+            src="{{ asset('custom_assets/js/app/directive/expandedcollapsedallDirective.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/app/providers/listBargeService.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/app/providers/datavoyageFactories.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('custom_assets/js/app/providers/factoryConfig.js') }}"></script>
+    <!--graph plugin -->
+    <script>
+
+    </script>
+
+{% endblock %}
+
+
+
+
+
+
+                            {#<div class="interne-structure" style="width:9%" >#}
+                            {#<a data-toggle="modal" data-target="#myModalTranc" ng-click="graphByTank(33)">#}
+                            {#<div class="mini-part">#}
+                            {#<div class="full-part-mini top-part" style="height: 40px">#}
+                            {#<div class="title-part">sbb</div>#}
+                            {#<div class="title-part text-right text-yellow">#}
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_dielectric.png") }}">2.3#}
+                            {#</div>#}
+                            {#<div class="line-part">#}
+                            {#<div class="line"></div>#}
+                            {#<div class="temperature">145cm</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="full-part-mini buttom-part" style="height: 20px">#}
+                            {#<div class="qualtity">343kg</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#</a>#}
+                            {#<a data-toggle="modal" data-target="#myModalTranc" ng-click="graphByTank(44)">#}
+                            {#<div class="mini-part">#}
+                            {#<div class="full-part-mini top-part danger" style="height: 40px;  ">#}
+                            {#<div class="title-part">sb4</div>#}
+                            {#<div class="title-part text-right text-yellow">#}
+                            {#<img tooltips tooltip-template="Alert3"#}
+                            {#tooltip-side="top"#}
+                            {#src="{{ asset("custom_assets/images/icons/ic_alert_rouge.png") }}">#}
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_dielectric.png") }}">2.3#}
+                            {#</div>#}
+                            {#<div class="line-part">#}
+                            {#<div class="line"></div>#}
+                            {#<div class="temperature">45cm</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="full-part-mini buttom-part dangerBg" style="height: 20px">#}
+                            {#<div class="qualtity">343kg</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#</a>#}
+                            {#</div>#}
+                            {#<div class="interne-structure danger" style="width:17%">#}
+                            {#<a data-toggle="modal" data-target="#myModalTranc" ng-click="graphByTank(5)">#}
+                            {#<div class="full-part top-part " style="height: 60px; ">#}
+                            {#<div class="title-part">tank5#}
+                            {#<div class="float-right ">#}
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_temperature.png") }}">#}
+                            {#20°C#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="title-part text-right text-yellow">#}
+                            {#<img tooltips tooltip-template="Alert2"#}
+                            {#tooltip-side="top"#}
+                            {#src="{{ asset("custom_assets/images/icons/ic_alert_rouge.png") }}">#}
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_dielectric.png") }}">2.3<br>#}
+                            {#</div>#}
+                            {#<div class="line-part">#}
+                            {#<div class="line"></div>#}
+                            {#<div class="temperature">290cm</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="full-part buttom-part dangerBg" style="height: 60px">#}
+                            {#<div class="qualtity">2343kg</div>#}
+                            {#</div>#}
+                            {#</a>#}
+                            {#</div>#}
+                            {#<div class="interne-structure" style="width:17%">#}
+                            {#<a data-toggle="modal" data-target="#myModalTranc" ng-click="graphByTank(33)">#}
+                            {#<div class="mini-part">#}
+                            {#<div class="full-part-mini top-part" style="height: 40px">#}
+                            {#<div class="title-part">sbb</div>#}
+                            {#<div class="title-part text-right text-yellow">#}
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_dielectric.png") }}">2.3#}
+                            {#</div>#}
+                            {#<div class="line-part">#}
+                            {#<div class="line"></div>#}
+                            {#<div class="temperature">145cm</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="full-part-mini buttom-part" style="height: 20px">#}
+                            {#<div class="qualtity">343kg</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#</a>#}
+                            {#<a data-toggle="modal" data-target="#myModalTranc" ng-click="graphByTank(44)">#}
+                            {#<div class="mini-part">#}
+                            {#<div class="full-part-mini top-part danger" style="height: 40px;  ">#}
+                            {#<div class="title-part">sb4</div>#}
+                            {#<div class="title-part text-right text-yellow">#}
+                            {#<img tooltips tooltip-template="Alert3"#}
+                            {#tooltip-side="top"#}
+                            {#src="{{ asset("custom_assets/images/icons/ic_alert_rouge.png") }}">#}
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_dielectric.png") }}">2.3#}
+                            {#</div>#}
+                            {#<div class="line-part">#}
+                            {#<div class="line"></div>#}
+                            {#<div class="temperature">45cm</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="full-part-mini buttom-part dangerBg" style="height: 20px">#}
+                            {#<div class="qualtity">343kg</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#</a>#}
+                            {#</div>#}
+                            {#<div class="interne-structure" style="width:17%">#}
+                            {#<a data-toggle="modal" data-target="#myModalTranc" ng-click="graphByTank(3)">#}
+                            {#<div class="full-part top-part" style="height: 60px">#}
+                            {#<div class="title-part">tank 3#}
+                            {#<div class="float-right ">#}
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_temperature.png") }}">#}
+                            {#20°C#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="title-part text-right text-yellow">#}
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_dielectric.png") }}">2.3<br>#}
+                            {#</div>#}
+                            {#<div class="line-part">#}
+                            {#<div class="line"></div>#}
+                            {#<div class="temperature">45cm</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="full-part buttom-part" style="height: 60px">#}
+                            {#<div class="qualtity">2343kg</div>#}
+                            {#</div>#}
+                            {#</a>#}
+                            {#</div>#}
+                            {#<div class="interne-structure" style="width:17%">#}
+                            {#<a data-toggle="modal" data-target="#myModalTranc" ng-click="graphByTank(2)">#}
+                            {#<div class="full-part top-part" style="height: 60px">#}
+                            {#<div class="title-part">tank 2#}
+                            {#<div class="float-right ">#}
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_temperature.png") }}">#}
+                            {#20°C#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="title-part text-right text-yellow">#}
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_dielectric.png") }}">2.3<br>#}
+                            {#</div>#}
+                            {#<div class="line-part">#}
+                            {#<div class="line"></div>#}
+                            {#<div class="temperature">45cm</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="full-part buttom-part" style="height: 60px">#}
+                            {#<div class="qualtity">2343kg</div>#}
+                            {#</div>#}
+                            {#</a>#}
+                            {#</div>#}
+                            {#<div class="interne-structure" style="width:17%">#}
+                            {#<a data-toggle="modal" data-target="#myModalTranc" ng-click="graphByTank(1)">#}
+                            {#<div class="full-part top-part" style="height: 60px">#}
+                            {#<div class="title-part">tank 1#}
+                            {#<div class="float-right ">#}
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_temperature.png") }}">#}
+                            {#20°C#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="title-part text-right text-yellow">#}
+                            {#<img src="{{ asset("custom_assets/images/icons/ic_dielectric.png") }}">2.3<br>#}
+                            {#</div>#}
+                            {#<div class="line-part">#}
+                            {#<div class="line"></div>#}
+                            {#<div class="temperature">45cm</div>#}
+                            {#</div>#}
+                            {#</div>#}
+                            {#<div class="full-part buttom-part" style="height: 60px">#}
+                            {#<div class="qualtity">2343kg</div>#}
+                            {#</div>#}
+                            {#</a>#}
+                            {#</div>#}
