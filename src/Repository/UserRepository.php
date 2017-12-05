@@ -40,21 +40,14 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
         return $getResult ? $preparedQuery->getResult() : $preparedQuery;
     }
 
-    public function getCrews()
-    {
-        $qb = $this->createQueryBuilder("u");
-        $qb
-            ->select("u")
-            ->where($qb->expr()->like("u.roles", "UPPER('%ROLE_CREW%')"));
-        return $qb;
-    }
 
-    public function getCtls()
+    public function getFirstByRole($role)
     {
         $qb = $this->createQueryBuilder("u");
         $qb
             ->select("u")
-            ->where($qb->expr()->like("u.roles", "UPPER('%ROLE_CTL%')"));
-        return $qb->getQuery()->getResult();
+            ->where($qb->expr()->like("u.roles", "UPPER('%$role%')"))
+            ->setMaxResults(1);
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }
