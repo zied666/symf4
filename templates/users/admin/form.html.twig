@@ -1,26 +1,28 @@
-{% extends ":users/ctl:index.html.twig" %}
-{% block title %}Ctl{% endblock %}
+{% extends "users/admin/index.html.twig" %}
+{% import "layout/macros/buttons.html.twig" as buttons %}
+{% import "layout/macros/forms.html.twig" as forms %}
+{% block title %}Administrators{% endblock %}
 {% block breadcrumb %}
     {{ parent() }}
     <li><a href="#">Form</a></li>
 {% endblock %}
  {% block body %}
      <div class="row">
-         <div class="col-sm-offset-2 col-lg-offset-3 col-md-offset-3 col-md-6  col-lg-6 col-sm-8 col-xs-12">
+         <div class="col-md-12">
              {{ form_start(form) }}
              <div class="panel panel-flat">
                  <div class="panel-body">
                      <div class="row">
-                         {{ forms.input("col-md-12","Full Name",form.fullName) }}
-                         {{ forms.input("col-md-12","Email",form.email) }}
-                         {{ forms.input("col-md-12","Mobile",form.mobile) }}
+                         {{ forms.input("col-md-4","Full Name",form.fullName) }}
+                         {{ forms.input("col-md-4","Email",form.email) }}
+                         {{ forms.input("col-md-4","Mobile",form.mobile) }}
                      </div>
                      {% if  user.id is null %}
                          <div class="row">
-                             {{ forms.input("col-md-12","Password",form.plainPassword.first) }}
+                             {{ forms.input("col-md-4","Password",form.plainPassword.first) }}
                          </div>
                          <div class="row">
-                             {{ forms.input("col-md-12","Password Confirmation",form.plainPassword.second) }}
+                             {{ forms.input("col-md-4","Password Confirmation",form.plainPassword.second) }}
                          </div>
                      {% endif %}
                      {{ buttons.submitForm() }}

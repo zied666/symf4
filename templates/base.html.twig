@@ -17,9 +17,6 @@
     <link href="{{ asset('back_template/assets/css/core.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('back_template/assets/css/components.css') }}" rel="stylesheet" type="text/css">
     <link href="{{ asset('back_template/assets/css/colors.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('custom_assets/css/font-awesome.min.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('custom_assets/css/font.css') }}" rel="stylesheet" type="text/css">
-    <link href="{{ asset('custom_assets/css/style.css') }}" rel="stylesheet" type="text/css">
     <!-- /global stylesheets -->
 
     {% block stylesheets %}{% endblock %}
@@ -33,11 +30,8 @@
     <!-- /core JS files -->
 
     {% block javascripts %}{% endblock %}
-
     {{ scripts.notification() }}
-
     {% include "layout/alert.html.twig" %}
-
 </head>
 <body {% if app.request.session.get('menu_collapsed') %}class="sidebar-xs"{% endif %}>
 {% include 'layout/navbar.html.twig' %}

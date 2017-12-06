@@ -1,31 +1,30 @@
 {% extends "base.html.twig" %}
-{% block title %}CTLs List{% endblock %}
+{% import "layout/macros/buttons.html.twig" as buttons %}
+{% import "layout/macros/scripts.html.twig" as scripts %}
+{% block title %}Administrators List{% endblock %}
 {% block breadcrumb %}
-    <li><a href="{{ path('ctls_list') }}">CTLs list</a></li>
+    <li><a href="{{ path('admins_list') }}">Administrators list</a></li>
 {% endblock %}
  {% block body %}
-     <div class="content">
-         <div class="panel panel-flat">
-             <div class="panel-heading-custom">
-                 {{ buttons.addItem("New CTL",path("ctls_form")) }}
-             </div>
-             <table class="table" id="myTable">
-                 <thead>
-                 <tr>
-                     <th>Name</th>
-                     <th>Mobile</th>
-                     <th>Email</th>
-                     <th>Locked</th>
-                     <th>Actions</th>
-                 </tr>
-                 </thead>
-             </table>
+     <div class="panel panel-flat">
+         <div class="panel-heading">
+             {{ buttons.addItem("New Administrator",path("admins_form")) }}
          </div>
+         <table class="table" id="myTable">
+             <thead>
+             <tr>
+                 <th>Name</th>
+                 <th>phone number</th>
+                 <th>Email</th>
+                 <th>Locked</th>
+                 <th>Actions</th>
+             </tr>
+             </thead>
+         </table>
      </div>
-
  {% endblock %}
 {% block javascripts %}
-    {{ scripts.dataTable("ctls_list",'{data: "fullName"},{data: "mobile"},{data: "email"},{data: "locked"},{data: "actions", orderable: false,width:"10%"}') }}
+    {{ scripts.dataTable("admins_list",'{data: "fullName"},{data: "mobile"},{data: "email"},{data: "locked"},{data: "actions", orderable: false,width:"10%"}') }}
     <script>
         $(document).ready(function () {
             $('#myTable').on('click', '.changeLock', function () {

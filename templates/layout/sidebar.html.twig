@@ -18,12 +18,7 @@
                 <div class="category-content no-padding">
                     <ul class="navigation navigation-main navigation-accordion">
                         <li {% if app.request.get('_route')=="dashboard" %}class="active"{% endif %}><a href="{{ path('dashboard') }}"><i class="icon-home4"></i> <span>Dashboard</span></a></li>
-                        {#{{ include('layout/menu/admin.html.twig') }}
-                        {{ include('layout/menu/voyage.html.twig') }}
-                        {{ include('layout/menu/barge.html.twig') }}
-                        {{ include('layout/menu/port.html.twig') }}
-                        {{ include('layout/menu/product.html.twig') }}
-                        {{ include('layout/menu/notification.html.twig') }}#}
+                        {{ include('layout/menu/admin.html.twig') }}
                     </ul>
                 </div>
             </div>

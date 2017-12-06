@@ -46,7 +46,7 @@ class SecurityController extends Controller
             return $this->redirect($this->generateUrl('change_password'));
         }
         return $this->render(
-            ':security:changePassword.html.twig', array(
+            'security/changePassword.html.twig', array(
                 'form' => $form->createView()
             )
         );

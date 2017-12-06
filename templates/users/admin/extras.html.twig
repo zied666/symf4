@@ -1,0 +1,15 @@
+{% import "layout/macros/buttons.html.twig" as buttons %}
+{% if viewType == "actions" %}
+    <ul class="icons-list">
+        <li>{{ buttons.deleteAction(path("admins_delete",{id:item.id})) }}</li>
+        <li>{{ buttons.updateAction(path("admins_form",{id:item.id})) }}</li>
+    </ul>
+    <script>$('[data-popup="tooltip"]').tooltip();</script>
+{% endif %}
+{% if viewType == "lock" %}
+    {% if item.lock %}
+        <button type="button" data-id="{{ item.id }}" data-locked="on" class="changeLock btn btn-danger btn-icon btn-rounded btn-sm"><i class="icon-lock4"></i></button>
+    {% else %}
+        <button type="button" data-id="{{ item.id }}" data-locked="off" class="changeLock btn btn-success btn-icon btn-rounded btn-sm"><i class="icon-unlocked"></i></button>
+    {% endif %}
+{% endif %}

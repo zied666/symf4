@@ -30,7 +30,7 @@ security:
             provider: default
             logout:
                 path:   /logout
-                target: /
+                target: /login
 
     access_control:
         - { path: ^/api/doc, role: ROLE_USER }

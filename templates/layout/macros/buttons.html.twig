@@ -1,7 +1,5 @@
 {% macro deleteAction(path,text=null) %}
-    <a href="javascript:void(0)" data-popup="tooltip" class="deleteItem text-mauve-icon" data-path="{{ path }}" title="Remove" >
-        <img width="18" src="{{ asset('custom_assets/images/icons/ic_delete.png') }}" class="" alt="">
-        {{ text }}</a>
+    <a href="javascript:void(0)" data-popup="tooltip" class="deleteItem text-mauve-icon" data-path="{{ path }}" title="Remove" ><i class="icon-trash"></i> {{ text }}</a>
 {% endmacro %}
 {% macro redirectAction(path,class,text,message=null) %}
     {% if message %}
@@ -10,17 +8,8 @@
         <a href="{{ path }}"><i class="{{ class }}"></i> {{ text }}</a>
     {% endif %}
 {% endmacro %}
-{% macro deleteRedirectAction(path,message=null) %}
-    {% if message %}
-        <a href="javascript:void(0)" class="redictionItem"  data-path="{{ path }}"><img width="18" src="{{ asset('custom_assets/images/icons/ic_delete.png') }}" ></a>
-    {% else %}
-        <a href="{{ path }}"><i class="{{ class }}"></i> {{ text }}</a>
-    {% endif %}
-{% endmacro %}
 {% macro updateAction(path) %}
-    <a href="{{ path }}" data-popup="tooltip" title="Edit" class="text-mauve-icon">
-        <img width="18" src="{{ asset('custom_assets/images/icons/ic_edit.png') }}" class="" alt="">
-    </a>
+    <a href="{{ path }}" data-popup="tooltip" title="Edit" class="text-mauve-icon"><i class="icon-pencil7"></i></a>
 {% endmacro %}
 {% macro viewAction(path) %}
     <a href="{{ path }}" data-popup="tooltip" title="View"><i class="icon-eye"></i></a>
@@ -29,7 +18,7 @@
     <a href="{{ path }}" data-popup="tooltip" title="Change Password" class="text-mauve-icon"><i class="icon-lock"></i></a>
 {% endmacro %}
 {% macro addItem(text,path) %}
-    <a href="{{ path }}" type="button" class="btn bg-green">{{ text }}</a>
+    <a href="{{ path }}" type="button" class="btn bg-rose"><i class="icon-plus3 position-left"></i>{{ text }}</a>
 {% endmacro %}
 {% macro submitForm() %}
     <div class="text-right" style="margin-top:10px;">
@@ -44,7 +33,7 @@
             <label>
                 &nbsp;
             </label>
-            <button type="submit" class="btn btn-block btn-search">Search<i class="icon-arrow-right14 position-right"></i>
+            <button type="submit" class="btn btn-block btn-primary">Search <i class="icon-arrow-right14 position-right"></i>
             </button>
         </div>
     </div>

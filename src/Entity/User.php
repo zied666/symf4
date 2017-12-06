@@ -48,7 +48,7 @@ class User implements AdvancedUserInterface
      * @Assert\Length(max=4096,groups={"create"})
      * @Assert\Regex(
      *     pattern="/[0-9!@#$%^*_-]+/",
-     *     message="Doit inclure au moins un chiffre ou !,@,#,$,%,^,*,_,-",
+     *     message="Must include at least one digit or !,@,#,$,%,^,*,_,-",
      *     groups={"create"}
      * )
      */
@@ -62,6 +62,13 @@ class User implements AdvancedUserInterface
     private $password;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="locked", type="boolean")
+     */
+    private $lock;
+
+    /**
      * @var array
      *
      * @ORM\Column(name="roles", type="json_array")
@@ -70,6 +77,7 @@ class User implements AdvancedUserInterface
 
     public function __construct()
     {
+        $this->lock=false;
         $this->roles = array();
     }
 
@@ -245,7 +253,7 @@ class User implements AdvancedUserInterface
 
     public function isAccountNonLocked()
     {
-        return true;
+        return !$this->lock;
     }
 
     public function isCredentialsNonExpired()
@@ -267,5 +275,28 @@ class User implements AdvancedUserInterface
     {
         return $this->fullName;
     }
-}
 
+    /**
+     * Set lock
+     *
+     * @param boolean $lock
+     *
+     * @return User
+     */
+    public function setLock($lock)
+    {
+        $this->lock = $lock;
+
+        return $this;
+    }
+
+    /**
+     * Get lock
+     *
+     * @return boolean
+     */
+    public function getLock()
+    {
+        return $this->lock;
+    }
+}
