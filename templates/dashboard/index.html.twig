@@ -1,5 +1,7 @@
 {% extends 'base.html.twig' %}
-
+    {#{% trans_default_locale "fr" %}#}
 {% block body %}
+    <p>{{ "Symfony is great"|trans([],"messages",app.request.locale) }}</p>
+    <p>{{ "Symfony is great"|trans }}</p>
 
 {% endblock %}

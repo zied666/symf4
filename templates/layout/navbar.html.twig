@@ -99,7 +99,7 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
-            {% if is_granted("ROLE_ADMIN") and false %}
+            {% if is_granted("ROLE_ADMIN") or true %}
                 <li class="dropdown language-switch">
                     <a class="dropdown-toggle" data-toggle="dropdown">
                         <img src="{{ asset('back_template/assets/images/flags/'~app.session.get("locale").code~'.png') }}" class="position-left" alt="">
@@ -107,8 +107,8 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
-                        {#<li {% if app.session.get("locale").code =="en" %}class="active"{% endif %}><a href="{{ path('change_locale',{locale:"en"}) }}" class="english"><img src="{{ asset('back_template/assets/images/flags/en.png') }}" alt=""> English</a></li>
-                        <li {% if app.session.get("locale").code =="fr" %}class="active"{% endif %}><a href="{{ path('change_locale',{locale:"fr"}) }}" class="espana"><img src="{{ asset('back_template/assets/images/flags/fr.png') }}" alt=""> Francais</a></li>#}
+                        <li {% if app.session.get("locale").code =="en" %}class="active"{% endif %}><a href="{{ path('change_locale',{locale:"en"}) }}" class="english"><img src="{{ asset('back_template/assets/images/flags/en.png') }}" alt=""> English</a></li>
+                        <li {% if app.session.get("locale").code =="fr" %}class="active"{% endif %}><a href="{{ path('change_locale',{locale:"fr"}) }}" class="espana"><img src="{{ asset('back_template/assets/images/flags/fr.png') }}" alt=""> Francais</a></li>
                     </ul>
                 </li>
             {% endif %}
