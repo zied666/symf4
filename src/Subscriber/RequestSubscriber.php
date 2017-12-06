@@ -5,6 +5,7 @@ namespace App\Subscriber;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
 
 class RequestSubscriber implements EventSubscriberInterface
 {
@@ -18,7 +19,7 @@ class RequestSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            "kernel.request" => 'onKernelRequest',
+            KernelEvents::REQUEST => array(array('onKernelRequest', 15)),
         );
     }
 

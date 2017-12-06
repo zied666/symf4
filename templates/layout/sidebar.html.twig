@@ -6,7 +6,7 @@
                     <div class="media">
                         <a href="#" class="media-left"><img src="{{ asset('back_template/assets/images/avatar.png') }}" class="img-circle img-sm" alt=""></a>
                         <div class="media-body">
-                            <span class="media-heading text-semibold">Welcome {{ app.user }}</span>
+                            <span class="media-heading text-semibold">{{ "Welcome"|trans }} {{ app.user }}</span>
                             <div class="text-size-mini text-muted">
                                 {% for role in app.user.roles %}{{ role }} {% endfor %}
                             </div>
@@ -17,7 +17,7 @@
             <div class="sidebar-category sidebar-category-visible ">
                 <div class="category-content no-padding">
                     <ul class="navigation navigation-main navigation-accordion">
-                        <li {% if app.request.get('_route')=="dashboard" %}class="active"{% endif %}><a href="{{ path('dashboard') }}"><i class="icon-home4"></i> <span>Dashboard</span></a></li>
+                        <li {% if app.request.get('_route')=="dashboard" %}class="active"{% endif %}><a href="{{ path('dashboard') }}"><i class="icon-home4"></i> <span>{{ "Dashboard"|trans }}</span></a></li>
                         {{ include('layout/menu/admin.html.twig') }}
                     </ul>
                 </div>
