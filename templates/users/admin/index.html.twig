@@ -29,18 +29,13 @@
         $(document).ready(function () {
             $('#myTable').on('click', '.changeLock', function () {
                 var id = $(this).data('id');
-                var locked = $(this).data('locked');
-                if (locked == 'on')
-                    $(this).parent().html('<button type="button" data-id="' + id + '" data-locked="off" class="changeLock btn btn-success btn-icon btn-rounded btn-sm"><i class="icon-unlocked"></i></button>');
-                else
-                    $(this).parent().html('<button type="button" data-id="' + id + '" data-locked="on" class="changeLock btn btn-danger btn-icon btn-rounded btn-sm"><i class="icon-lock4"></i></button>');
                 $.ajax({
                     url: '{{ path('admins_change_lock') }}',
                     data: {'id': id},
                     type: 'POST',
                     dataType: 'html',
                     success: function (data) {
-
+                        dataTable.ajax.reload();
                     }
                 });
             })

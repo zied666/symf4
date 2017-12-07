@@ -1,0 +1,10 @@
+{% extends "mails/base.html.twig" %}
+{% block body %}
+    <p>Welcome {{ user.fullName }}, </p>
+    <p>You have been registered as a {{ profile }} in Cargill by our Team</p>
+    {% if profile =="crew" %}
+        <p>To join us please download the mobile app Cargill</p>
+    {% endif %}
+    <p><strong>Login : </strong> {{ user.username }}</p>
+    <p><strong>Password : </strong> {{ password }}</p>
+{% endblock %}

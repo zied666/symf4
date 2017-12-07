@@ -37,6 +37,9 @@ class AdministratorsController extends Controller
 
             foreach ($items as $item)
             {
+                /**
+                 * @var $item User
+                 */
                 $output['data'][] = [
                     'id'       => $item->getId(),
                     'fullName' => $item->getFullName(),
@@ -54,9 +57,8 @@ class AdministratorsController extends Controller
     /**
      * @Route("/form/{id}", name="admins_form")
      */
-    public function formAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, $id = null)
+    public function formAction(Request $request, UserPasswordEncoderInterface $passwordEncoder, $id = null,EntityManagerInterface $em)
     {
-        $em = $this->get('doctrine.orm.entity_manager');
         if ($id)
         {
             $user = $em->getRepository(User::class)->find($id);
@@ -88,11 +90,10 @@ class AdministratorsController extends Controller
     /**
      * @Route("/delete/{id}", name="admins_delete")
      */
-    public function deleteAction(User $user)
+    public function deleteAction(User $user,EntityManagerInterface $em)
     {
         if ($this->getUser()->getId() == $user->getId())
             return new JsonResponse(false);
-        $em = $this->get('doctrine.orm.entity_manager');
         try
         {
             $em->remove($user);
@@ -111,7 +112,7 @@ class AdministratorsController extends Controller
     public function changeLockAction(Request $request,EntityManagerInterface $em)
     {
         $user = $em->getRepository(User::class)->find($request->get('id'));
-        if($user)
+        if($user and $user->getId()!= $this->getUser()->getId())
         {
             $user->setLock(!$user->getLock());
             $em->persist($user);
