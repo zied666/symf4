@@ -4,7 +4,6 @@ namespace App\Service;
 
 
 use App\Entity\User;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 
 class MailerService

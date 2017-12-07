@@ -3,6 +3,7 @@
     "license": "proprietary",
     "require": {
         "php": "^7.1.3",
+        "friendsofsymfony/rest-bundle": "^2.3",
         "sensio/framework-extra-bundle": "^5.1",
         "symfony/asset": "^4.0",
         "symfony/console": "^4.0",
@@ -14,7 +15,9 @@
         "symfony/orm-pack": "^1.0",
         "symfony/profiler-pack": "^1.0",
         "symfony/security-bundle": "^4.0",
+        "symfony/serializer-pack": "^1.0",
         "symfony/swiftmailer-bundle": "^3.1",
+        "symfony/templating": "^4.0",
         "symfony/translation": "^4.0",
         "symfony/twig-bundle": "^4.0",
         "symfony/validator": "^4.0",
