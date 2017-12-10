@@ -1,14 +1,14 @@
 {% extends "base.html.twig" %}
 {% import "layout/macros/buttons.html.twig" as buttons %}
 {% import "layout/macros/scripts.html.twig" as scripts %}
-{% block title %}Administrators List{% endblock %}
+{% block title %}{{ "Administrators list"|trans }}{% endblock %}
 {% block breadcrumb %}
-    <li><a href="{{ path('admins_list') }}">Administrators list</a></li>
+    <li><a href="{{ path('admins_list') }}">{{ "Administrators list"|trans }}</a></li>
 {% endblock %}
  {% block body %}
      <div class="panel panel-flat">
          <div class="panel-heading">
-             {{ buttons.addItem("New Administrator",path("admins_form")) }}
+             {{ buttons.addItem("New Administrator"|trans,path("admins_form")) }}
          </div>
          <table class="table" id="myTable">
              <thead>

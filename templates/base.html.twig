@@ -39,21 +39,19 @@
     <div class="page-content">
         {% include 'layout/sidebar.html.twig' %}
         <div class="content-wrapper">
-            {% if app.request.get('_route')!= "dashboard" and app.request.get('_route')!= "dashboardBarge"%}
                 <div class="page-header">
                     <div class="page-header-content">
                         <div class="page-title">
-                            <h4 class="text-mauve-300"><span class="text-semibold">{{ block('title') }}</span></h4>
+                            <h4 class="text-mauve-300"><span class="text-semibold">{{ block('title')|trans }}</span></h4>
                         </div>
                     </div>
                     <div class="breadcrumb-line">
                         <ul class="breadcrumb">
-                            <li><a href="{{ path("dashboard") }}"><i class="icon-home2 position-left"></i> Dashboard</a></li>
+                            <li><a href="{{ path("dashboard") }}"><i class="icon-home2 position-left"></i> {{ "Dashboard"|trans }}</a></li>
                             {% block breadcrumb %}{% endblock %}
                         </ul>
                     </div>
                 </div>
-            {% endif %}
             <div class="content">
                 {% block body %}{% endblock %}
                 {% include "layout/footer.html.twig" %}
