@@ -12,7 +12,6 @@ use Gedmo\Mapping\Annotation as Gedmo;
 /**
  * User
  *
- * @ApiResource()
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
  * @UniqueEntity("email",groups={"create","update"})

@@ -2,18 +2,31 @@
 
 namespace App\Controller\Api;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use App\Entity\User;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Swagger\Annotations as SWG;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ApiController extends Controller
 {
     /**
-     * @Route("/apixx", name="api")
+     * @SWG\Tag(name="Test")
+     * @Route("/api/test", methods={"GET"})
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns the rewards of an user"
+     * )
+     * @SWG\Parameter(
+     *     name="order",
+     *     in="query",
+     *     type="string",
+     *     description="The field used to order rewards"
+     * )
      */
-    public function index()
+    public function testAction(Request $request)
     {
-        // replace this line with your own code!
-        return $this->render('@Maker/demoPage.html.twig', [ 'path' => str_replace($this->getParameter('kernel.project_dir').'/', '', __FILE__) ]);
+        return $this->json($request->get('order'));
     }
 }
