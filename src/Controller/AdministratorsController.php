@@ -35,8 +35,6 @@ class AdministratorsController extends Controller
                 'recordsTotal'    => count($em->getRepository(User::class)->dataTable(array("ROLE_ADMIN")))
             );
 
-
-            
             foreach ($items as $item)
             {
                 /**
