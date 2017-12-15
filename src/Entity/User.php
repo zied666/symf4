@@ -73,7 +73,7 @@ class User implements AdvancedUserInterface
     /**
      * @var array
      *
-     * @ORM\Column(name="roles", type="json_array")
+     * @ORM\Column(name="roles", type="simple_array")
      */
     private $roles;
 
