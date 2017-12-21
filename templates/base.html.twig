@@ -29,9 +29,12 @@
     <script type="text/javascript" src="{{ asset('back_template/assets/js/core/app.js') }}"></script>
     <!-- /core JS files -->
 
+    
     <!-- Core JS routing -->
-    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
-    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    {% if app.environment in ['dev','prod'] %}
+        <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+        <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    {% endif %}
     <!-- /core JS routing -->
 
     {% block javascripts %}{% endblock %}
