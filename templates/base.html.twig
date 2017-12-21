@@ -29,6 +29,11 @@
     <script type="text/javascript" src="{{ asset('back_template/assets/js/core/app.js') }}"></script>
     <!-- /core JS files -->
 
+    <!-- Core JS routing -->
+    <script src="{{ asset('bundles/fosjsrouting/js/router.js') }}"></script>
+    <script src="{{ path('fos_js_routing_js', { callback: 'fos.Router.setData' }) }}"></script>
+    <!-- /core JS routing -->
+
     {% block javascripts %}{% endblock %}
     {{ scripts.notification() }}
     {% include "layout/alert.html.twig" %}
@@ -63,7 +68,7 @@
     $(document).ready(function () {
         $('.sidebar-control').click(function () {
             $.ajax({
-                url: "{{ path('ajax_change_menu') }}"
+                url:  Routing.generate('ajax_change_menu')
             })
         })
     })
